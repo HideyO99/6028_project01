@@ -145,7 +145,6 @@ int main(void)
     
     //load model
     cVAOManager* pVAOManager = new cVAOManager();
-    cModelLoader modelLoader;
 
     result = pVAOManager->loadModelList(MODEL_LIST_XML, shaderID);
     if (!result)
@@ -153,30 +152,30 @@ int main(void)
         return -1;
     }
 
-    //define model
-    glGenBuffers(1, &vertex_buffer);
-    glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    ////define model
+    //glGenBuffers(1, &vertex_buffer);
+    //glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer);
+    //glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-    //vertex layout
-    mvp_location = glGetUniformLocation(shaderID, "MVP");
-    vpos_location = glGetAttribLocation(shaderID, "vPosition"); //vertex position
-    vcol_location = glGetAttribLocation(shaderID, "vColour");
+    ////vertex layout
+    //mvp_location = glGetUniformLocation(shaderID, "MVP");
+    //vpos_location = glGetAttribLocation(shaderID, "vPosition"); //vertex position
+    //vcol_location = glGetAttribLocation(shaderID, "vColour");
 
-    glEnableVertexAttribArray(vpos_location);
-    glVertexAttribPointer(vpos_location,
-        3,
-        GL_FLOAT,
-        GL_FALSE,
-        sizeof(vertices[0]),
-        (void*)0);
-    glEnableVertexAttribArray(vcol_location);
-    glVertexAttribPointer(vcol_location,
-        3,
-        GL_FLOAT,
-        GL_FALSE,
-        sizeof(vertices[0]),
-        (void*)(sizeof(float) * 3));
+    //glEnableVertexAttribArray(vpos_location);
+    //glVertexAttribPointer(vpos_location,
+    //    3,
+    //    GL_FLOAT,
+    //    GL_FALSE,
+    //    sizeof(vertices[0]),
+    //    (void*)0);
+    //glEnableVertexAttribArray(vcol_location);
+    //glVertexAttribPointer(vcol_location,
+    //    3,
+    //    GL_FLOAT,
+    //    GL_FALSE,
+    //    sizeof(vertices[0]),
+    //    (void*)(sizeof(float) * 3));
 
     while (!glfwWindowShouldClose(window))
     {
@@ -222,7 +221,7 @@ int main(void)
         mvp = p * v * m;
 
        // glUseProgram(program);
-        glUniformMatrix4fv(mvp_location, 1, GL_FALSE, glm::value_ptr(mvp));
+        //glUniformMatrix4fv(mvp_location, 1, GL_FALSE, glm::value_ptr(mvp));
         glDrawArrays(GL_TRIANGLES, 0, 6);
 
         glfwSwapBuffers(window);

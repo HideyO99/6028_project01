@@ -25,7 +25,6 @@
     <ClCompile Include="src\Shader\cShaderManager.cpp" />
     <ClCompile Include="src\Shader\cShaderProgram.cpp" />
     <ClCompile Include="src\VAOManager\cModelDrawInfo.cpp" />
-    <ClCompile Include="src\VAOManager\cModelLoader.cpp" />
     <ClCompile Include="src\VAOManager\cVAOManager.cpp" />
     <ClCompile Include="src\VAOManager\cXML.cpp" />
   </ItemGroup>
@@ -33,7 +32,6 @@
     <ClInclude Include="src\globalOpenGL.h" />
     <ClInclude Include="src\Shader\cShaderManager.h" />
     <ClInclude Include="src\VAOManager\cModelDrawInfo.h" />
-    <ClInclude Include="src\VAOManager\cModelLoader.h" />
     <ClInclude Include="src\VAOManager\cVAOManager.h" />
     <ClInclude Include="src\VAOManager\cXML.h" />
   </ItemGroup>

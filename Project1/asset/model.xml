@@ -1,4 +1,4 @@
 <?xml version = "1.0" encoding="UTF-8"?>
 <PLYMODEL>
-	<model name="terrain">asset/model/terrain03.ply</model>
+	<model name="terrain">asset/model/terrain02.ply</model>
 </PLYMODEL>

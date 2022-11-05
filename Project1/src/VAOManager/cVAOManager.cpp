@@ -20,106 +20,51 @@ bool cVAOManager::loadModelToVAO(std::string filename, cModelDrawInfo& drawInfo,
 	//vertices
 	glGenBuffers(1, &(drawInfo.VertexBufferID));
 	glBindBuffer(GL_ARRAY_BUFFER, drawInfo.VertexBufferID);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(cModelDrawInfo::sVertex_RGBA_XYZ_N_UV_T_BiN_Bones) * drawInfo.numberOfVertices, (GLvoid*)drawInfo.pVertices, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(cModelDrawInfo::sVertex_XYZ_N) * drawInfo.numberOfVertices, (GLvoid*)drawInfo.pVertices, GL_STATIC_DRAW);
 
 	//indices
 	glGenBuffers(1, &(drawInfo.IndexBufferID));
 	glBindBuffer(GL_ELEMENT_ARRAY_BARRIER_BIT, drawInfo.IndexBufferID);
 	glBufferData(GL_ELEMENT_ARRAY_BARRIER_BIT, sizeof(unsigned int) * drawInfo.numberOfIndices, (GLvoid*)drawInfo.pIndices, GL_STATIC_DRAW);
 
-
-	GLint vColour_location = glGetAttribLocation(shaderProgramID, "vColour");
-	glEnableVertexAttribArray(vColour_location);
-	glVertexAttribPointer(vColour_location,
-		4, 
-		GL_FLOAT,
-		GL_FALSE,
-		sizeof(cModelDrawInfo::sVertex_RGBA_XYZ_N_UV_T_BiN_Bones),						// Stride	(number of bytes)
-		(void*)offsetof(cModelDrawInfo::sVertex_RGBA_XYZ_N_UV_T_BiN_Bones, r));		// Offset the member variable
-
-	//in vec4 vPosition;			
+	//in vec3 vPosition;			
 	GLint vPosition_location = glGetAttribLocation(shaderProgramID, "vPosition");
 	glEnableVertexAttribArray(vPosition_location);
 	glVertexAttribPointer(vPosition_location,
-		4, 
+		3, 
 		GL_FLOAT,
 		GL_FALSE,
-		sizeof(cModelDrawInfo::sVertex_RGBA_XYZ_N_UV_T_BiN_Bones),						// Stride	(number of bytes)
-		(void*)offsetof(cModelDrawInfo::sVertex_RGBA_XYZ_N_UV_T_BiN_Bones, x));		// Offset the member variable
+		sizeof(cModelDrawInfo::sVertex_XYZ_N),						// Stride	(number of bytes)
+		(void*)offsetof(cModelDrawInfo::sVertex_XYZ_N, x));		// Offset the member variable
 
-	//in vec4 vNormal;			
+	//in vec3 vNormal;			
 	GLint vNormal_location = glGetAttribLocation(shaderProgramID, "vNormal");
 	glEnableVertexAttribArray(vNormal_location);
 	glVertexAttribPointer(vNormal_location,
-		4, 
+		3, 
 		GL_FLOAT,
 		GL_FALSE,
-		sizeof(cModelDrawInfo::sVertex_RGBA_XYZ_N_UV_T_BiN_Bones),						// Stride	(number of bytes)
-		(void*)offsetof(cModelDrawInfo::sVertex_RGBA_XYZ_N_UV_T_BiN_Bones, nx));		// Offset the member variable
+		sizeof(cModelDrawInfo::sVertex_XYZ_N),						// Stride	(number of bytes)
+		(void*)offsetof(cModelDrawInfo::sVertex_XYZ_N, nx));		// Offset the member variable
 
-	//in vec4 vUVx2;			
-	GLint vUVx2_location = glGetAttribLocation(shaderProgramID, "vUVx2");
-	glEnableVertexAttribArray(vUVx2_location);
-	glVertexAttribPointer(vUVx2_location,
-		4, 
+	//in vec4 vPosition;			
+	GLint vColour_location = glGetAttribLocation(shaderProgramID, "vColour");
+	glEnableVertexAttribArray(vColour_location);
+	glVertexAttribPointer(vColour_location,
+		4,
 		GL_FLOAT,
 		GL_FALSE,
-		sizeof(cModelDrawInfo::sVertex_RGBA_XYZ_N_UV_T_BiN_Bones),						// Stride	(number of bytes)
-		(void*)offsetof(cModelDrawInfo::sVertex_RGBA_XYZ_N_UV_T_BiN_Bones, u0));		// Offset the member variable
-
-	//in vec4 vTangent;			
-	GLint vTangent_location = glGetAttribLocation(shaderProgramID, "vTangent");
-	glEnableVertexAttribArray(vTangent_location);
-	glVertexAttribPointer(vTangent_location,
-		4, 
-		GL_FLOAT,
-		GL_FALSE,
-		sizeof(cModelDrawInfo::sVertex_RGBA_XYZ_N_UV_T_BiN_Bones),						// Stride	(number of bytes)
-		(void*)offsetof(cModelDrawInfo::sVertex_RGBA_XYZ_N_UV_T_BiN_Bones, tx));		// Offset the member variable
-
-	//in vec4 vBiNormal;		
-	GLint vBiNormal_location = glGetAttribLocation(shaderProgramID, "vBiNormal");
-	glEnableVertexAttribArray(vBiNormal_location);
-	glVertexAttribPointer(vBiNormal_location,
-		4, 
-		GL_FLOAT,
-		GL_FALSE,
-		sizeof(cModelDrawInfo::sVertex_RGBA_XYZ_N_UV_T_BiN_Bones),						// Stride	(number of bytes)
-		(void*)offsetof(cModelDrawInfo::sVertex_RGBA_XYZ_N_UV_T_BiN_Bones, bx));		// Offset the member variable
-
-	//in vec4 vBoneID;			
-	GLint vBoneID_location = glGetAttribLocation(shaderProgramID, "vBoneID");
-	glEnableVertexAttribArray(vBoneID_location);
-	glVertexAttribPointer(vBoneID_location,
-		4, 
-		GL_FLOAT,
-		GL_FALSE,
-		sizeof(cModelDrawInfo::sVertex_RGBA_XYZ_N_UV_T_BiN_Bones),						// Stride	(number of bytes)
-		(void*)offsetof(cModelDrawInfo::sVertex_RGBA_XYZ_N_UV_T_BiN_Bones, vBoneID[0]));		// Offset the member variable
-
-	//in vec4 vBoneWeight;		
-	GLint vBoneWeight_location = glGetAttribLocation(shaderProgramID, "vBoneWeight");
-	glEnableVertexAttribArray(vBoneWeight_location);
-	glVertexAttribPointer(vBoneWeight_location,
-		4, 
-		GL_FLOAT,
-		GL_FALSE,
-		sizeof(cModelDrawInfo::sVertex_RGBA_XYZ_N_UV_T_BiN_Bones),						// Stride	(number of bytes)
-		(void*)offsetof(cModelDrawInfo::sVertex_RGBA_XYZ_N_UV_T_BiN_Bones, vBoneWeight[0]));		// Offset the member variable
+		sizeof(cModelDrawInfo::sVertex_XYZ_N),						// Stride	(number of bytes)
+		(void*)offsetof(cModelDrawInfo::sVertex_XYZ_N, r));		// Offset the member variable
 
 	glBindVertexArray(0);
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-	glDisableVertexAttribArray(vColour_location);
 	glDisableVertexAttribArray(vPosition_location);
 	glDisableVertexAttribArray(vNormal_location);
-	glDisableVertexAttribArray(vUVx2_location);
-	glDisableVertexAttribArray(vTangent_location);
-	glDisableVertexAttribArray(vBiNormal_location);
-	glDisableVertexAttribArray(vBoneID_location);
-	glDisableVertexAttribArray(vBoneWeight_location);
+	glDisableVertexAttribArray(vColour_location);
 
 	this->mapModelNametoVAOID[drawInfo.meshName] = drawInfo;
 
@@ -142,9 +87,8 @@ bool cVAOManager::loadModelList(std::string filename, unsigned int shaderProgram
 	for (i_mapModel = modelListXML.mapModelNameAndPath.begin(); i_mapModel != modelListXML.mapModelNameAndPath.end(); i_mapModel++)
 	{
 		cModelDrawInfo modelDrawInfo;
-		cModelLoader fileLoader;
 		std::string error = "";
-		result = fileLoader.loadPLYFile(i_mapModel->second, modelDrawInfo, error);
+		result = loadPLYFile(i_mapModel->second, modelDrawInfo, error);
 		if (!result)
 		{
 			std::cout << "cannot load " << i_mapModel->first << std::endl;
@@ -175,5 +119,95 @@ bool cVAOManager::FindDrawInfo(std::string filename, cModelDrawInfo& drawInfo)
 
 	drawInfo = i_DrawInfo->second;
 
+	return true;
+}
+
+bool cVAOManager::loadPLYFile(std::string filename, cModelDrawInfo& modelDrawInfo, std::string error)
+{
+	sTrianglePLY* pTheModelTriangleArray = NULL;
+
+	std::ifstream modelFile(filename);
+	if (!modelFile.is_open())
+	{
+		error = " cannot open " + filename;
+		return false;
+	}
+
+	char buffer[MODEL_LOAD_BUFFER];
+	modelFile.getline(buffer, MODEL_LOAD_BUFFER);
+	std::string nextToken;
+
+	while (modelFile >> nextToken)
+	{
+		if (nextToken == "vertex")
+		{
+			break;
+		}
+	}
+	modelFile >> modelDrawInfo.numberOfVertices;
+
+	while (modelFile >> nextToken)
+	{
+		if (nextToken == "face")
+		{
+			break;
+		}
+	}
+	modelFile >> modelDrawInfo.numberOfTriangles;
+
+	while (modelFile >> nextToken)
+	{
+		if (nextToken == "end_header")
+		{
+			break;
+		}
+	}
+
+	modelDrawInfo.pVertices = new cModelDrawInfo::sVertex_XYZ_N[modelDrawInfo.numberOfVertices];
+
+	for (unsigned int i = 0; i != modelDrawInfo.numberOfVertices; i++)
+	{
+
+		modelFile >> modelDrawInfo.pVertices[i].x;
+		modelFile >> modelDrawInfo.pVertices[i].y;
+		modelFile >> modelDrawInfo.pVertices[i].z;
+
+		modelFile >> modelDrawInfo.pVertices[i].nx;
+		modelFile >> modelDrawInfo.pVertices[i].ny;
+		modelFile >> modelDrawInfo.pVertices[i].nz;
+
+		modelFile >> modelDrawInfo.pVertices[i].r;
+		modelFile >> modelDrawInfo.pVertices[i].g;
+		modelFile >> modelDrawInfo.pVertices[i].b;
+		modelFile >> modelDrawInfo.pVertices[i].a;
+
+	}
+
+	pTheModelTriangleArray = new sTrianglePLY[modelDrawInfo.numberOfTriangles];
+	for (unsigned int count = 0; count != modelDrawInfo.numberOfTriangles; count++)
+	{
+		// 3 15393 15394 15395 
+		unsigned int discard = 0;
+		modelFile >> discard;
+
+		modelFile >> pTheModelTriangleArray[count].vertexIndices[0];
+		modelFile >> pTheModelTriangleArray[count].vertexIndices[1];
+		modelFile >> pTheModelTriangleArray[count].vertexIndices[2];
+	}
+
+	modelFile.close();
+
+	modelDrawInfo.numberOfIndices = modelDrawInfo.numberOfTriangles * 3;
+	modelDrawInfo.pIndices = new unsigned int[modelDrawInfo.numberOfIndices];
+
+	unsigned int vertex_element_index_index = 0;
+
+	for (unsigned int i = 0; i != modelDrawInfo.numberOfTriangles; i++)
+	{
+		modelDrawInfo.pIndices[vertex_element_index_index + 0] = pTheModelTriangleArray[i].vertexIndices[0];
+		modelDrawInfo.pIndices[vertex_element_index_index + 1] = pTheModelTriangleArray[i].vertexIndices[1];
+		modelDrawInfo.pIndices[vertex_element_index_index + 2] = pTheModelTriangleArray[i].vertexIndices[2];
+		vertex_element_index_index += 3;
+	}
 	return true;
 }

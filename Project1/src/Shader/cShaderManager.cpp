@@ -101,6 +101,7 @@ unsigned int cShaderManager::getIDfromName(std::string callSign)
 	return i_shader->second;
 }
 
+
 bool cShaderManager::cLoadShaderSourceCode(cShader& shader)
 {
 	std::string code;

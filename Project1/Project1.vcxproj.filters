@@ -42,9 +42,6 @@
     <ClCompile Include="src\VAOManager\cVAOManager.cpp">
       <Filter>VAOManager</Filter>
     </ClCompile>
-    <ClCompile Include="src\VAOManager\cModelLoader.cpp">
-      <Filter>VAOManager</Filter>
-    </ClCompile>
     <ClCompile Include="src\VAOManager\cXML.cpp">
       <Filter>VAOManager</Filter>
     </ClCompile>
@@ -63,9 +60,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\VAOManager\cXML.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\VAOManager\cModelLoader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

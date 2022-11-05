@@ -51,7 +51,7 @@ public:
 	bool useShaderPRogram(std::string callSign);
 	unsigned int getIDfromName(std::string callSign);
 
-	cShaderProgram* pGetShaderProgramFromName(std::string callSign);
+	//cShaderProgram* pGetShaderProgramFromName(std::string callSign);
 
 private:
 	bool cLoadShaderSourceCode(cShader& shader);
