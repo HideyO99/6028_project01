@@ -22,7 +22,7 @@ bool cVAOManager::loadModelToVAO(std::string filename, cModelDrawInfo& drawInfo,
 	//vertices
 	glGenBuffers(1, &(drawInfo.VertexBufferID));
 	glBindBuffer(GL_ARRAY_BUFFER, drawInfo.VertexBufferID);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(cModelDrawInfo::sVertex_XYZ_N) * drawInfo.numberOfVertices, (GLvoid*)drawInfo.pVertices, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(cModelDrawInfo::sVertex_XYZ_N_UV) * drawInfo.numberOfVertices, (GLvoid*)drawInfo.pVertices, GL_STATIC_DRAW);
 
 	//indices
 	glGenBuffers(1, &(drawInfo.IndexBufferID));
@@ -36,8 +36,8 @@ bool cVAOManager::loadModelToVAO(std::string filename, cModelDrawInfo& drawInfo,
 		3, 
 		GL_FLOAT,
 		GL_FALSE,
-		sizeof(cModelDrawInfo::sVertex_XYZ_N),						// Stride	(number of bytes)
-		(void*)offsetof(cModelDrawInfo::sVertex_XYZ_N, x));		// Offset the member variable
+		sizeof(cModelDrawInfo::sVertex_XYZ_N_UV),						// Stride	(number of bytes)
+		(void*)offsetof(cModelDrawInfo::sVertex_XYZ_N_UV, x));		// Offset the member variable
 
 	//in vec3 vNormal;			
 	GLint vNormal_location = glGetAttribLocation(shaderProgramID, "vNormal");
@@ -48,8 +48,8 @@ bool cVAOManager::loadModelToVAO(std::string filename, cModelDrawInfo& drawInfo,
 		3, 
 		GL_FLOAT,
 		GL_FALSE,
-		sizeof(cModelDrawInfo::sVertex_XYZ_N),						// Stride	(number of bytes)
-		(void*)offsetof(cModelDrawInfo::sVertex_XYZ_N, nx));		// Offset the member variable
+		sizeof(cModelDrawInfo::sVertex_XYZ_N_UV),						// Stride	(number of bytes)
+		(void*)offsetof(cModelDrawInfo::sVertex_XYZ_N_UV, nx));		// Offset the member variable
 	error = glGetError();
 	//in vec4 vPosition;			
 	GLint vColour_location = glGetAttribLocation(shaderProgramID, "vColour");
@@ -59,8 +59,8 @@ bool cVAOManager::loadModelToVAO(std::string filename, cModelDrawInfo& drawInfo,
 		4,
 		GL_FLOAT,
 		GL_FALSE,
-		sizeof(cModelDrawInfo::sVertex_XYZ_N),						// Stride	(number of bytes)
-		(void*)offsetof(cModelDrawInfo::sVertex_XYZ_N, r));		// Offset the member variable
+		sizeof(cModelDrawInfo::sVertex_XYZ_N_UV),						// Stride	(number of bytes)
+		(void*)offsetof(cModelDrawInfo::sVertex_XYZ_N_UV, r));		// Offset the member variable
 	error = glGetError();
 	glBindVertexArray(0);
 
@@ -171,7 +171,7 @@ bool cVAOManager::loadPLYFile(std::string filename, cModelDrawInfo& modelDrawInf
 		}
 	}
 
-	modelDrawInfo.pVertices = new cModelDrawInfo::sVertex_XYZ_N[modelDrawInfo.numberOfVertices];
+	modelDrawInfo.pVertices = new cModelDrawInfo::sVertex_XYZ_N_UV[modelDrawInfo.numberOfVertices];
 
 	for (unsigned int i = 0; i != modelDrawInfo.numberOfVertices; i++)
 	{
@@ -189,12 +189,14 @@ bool cVAOManager::loadPLYFile(std::string filename, cModelDrawInfo& modelDrawInf
 		modelFile >> modelDrawInfo.pVertices[i].b;
 		modelFile >> modelDrawInfo.pVertices[i].a;
 
+		modelFile >> modelDrawInfo.pVertices[i].u;
+		modelFile >> modelDrawInfo.pVertices[i].v;
+
 	}
 
 	pTheModelTriangleArray = new sTrianglePLY[modelDrawInfo.numberOfTriangles];
 	for (unsigned int count = 0; count != modelDrawInfo.numberOfTriangles; count++)
 	{
-		// 3 15393 15394 15395 
 		unsigned int discard = 0;
 		modelFile >> discard;
 

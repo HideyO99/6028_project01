@@ -23,8 +23,9 @@
 #define VERTEX_SHADER_FILE      "src/shader/vertexShader.glsl"
 #define FRAGMENT_SHADER_FILE    "src/shader/fragmentShader.glsl"
 
-glm::vec3 g_cameraEye = glm::vec3(0.0, 100.0, -300.0f);
-glm::vec3 g_cameraTarget = glm::vec3(0.0f, 0.0f, 0.0f);
+//glm::vec3 g_cameraEye = glm::vec3(0.0, 100.0, -300.0f);
+glm::vec3 g_cameraEye = glm::vec3(0.0, 100.0, 300.0f);
+glm::vec3 g_cameraTarget = glm::vec3(5.0f, 0.0f, 0.0f);
 
 
 static void error_callback(int error, const char* description)
@@ -67,7 +68,9 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
     }
     if (key == GLFW_KEY_SPACE)
     {
-        ::g_cameraEye = glm::vec3(-5.5f, -3.4f, 15.0f);
+        //::g_cameraEye = glm::vec3(-5.5f, -3.4f, 15.0f);
+        ::g_cameraEye = glm::vec3(0.0, 100.0, 300.0f);
+        //::g_cameraTarget = glm::vec3(5.0f, 0.0f, 0.0f);
     }
 }
 
@@ -181,10 +184,6 @@ int main(void)
         glm::vec3 upVector = glm::vec3(0.0f, 1.0f, 0.0f);
 
         matView = glm::lookAt(::g_cameraEye, ::g_cameraTarget, upVector);
-
-        //GLint eyeLocation_UniLoc = glGetUniformLocation(shaderID, "eyeLocation");
-
-        //glUniform4f(eyeLocation_UniLoc, ::g_cameraEye.x, ::g_cameraEye.y, ::g_cameraEye.z, 1.0f);
 
         matProjection = glm::perspective( 0.6f, ratio, 0.1f, 10000.0f);
 
