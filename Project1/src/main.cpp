@@ -55,7 +55,7 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
     //move camera
     // AWSD AD-Left, Right
     //      WS-Forward, Back
-    const float CAMERA_MOVE_SPEED = 0.1f;
+    const float CAMERA_MOVE_SPEED = 1.f;
     if (key == GLFW_KEY_A)
     {
         ::g_cameraEye.x -= CAMERA_MOVE_SPEED;
@@ -82,7 +82,7 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
     }
     if (key == GLFW_KEY_SPACE)
     {
-        ::g_cameraEye = glm::vec3(0.0f, 0.0f, -4.0f);
+        ::g_cameraEye = glm::vec3(-5.5f, -3.4f, 15.0f);
     }
 }
 
@@ -167,7 +167,7 @@ int main(void)
     }
     cMeshObj* pTerrain = new cMeshObj();
     pTerrain->meshName = "terrain";
-    pTerrain->position = glm::vec3(0.0f, -25.0f, -50.0f);
+    pTerrain->position = glm::vec3(0.0f, 0.0f, 0.0f);
     pTerrain->isWireframe = false;
     pTerrain->isVisible = true;
     pTerrain->scale = 0.5f;
@@ -262,7 +262,7 @@ int main(void)
                 pCurrentMeshObject->color_RGBA.r,
                 pCurrentMeshObject->color_RGBA.g,
                 pCurrentMeshObject->color_RGBA.b,
-                pCurrentMeshObject->color_RGBA.a);
+                pCurrentMeshObject->color_RGBA.w);
 
             cModelDrawInfo drawingInformation;
             if (pVAOManager->FindDrawInfo(pCurrentMeshObject->meshName, drawingInformation))

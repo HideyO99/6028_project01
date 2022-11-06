@@ -31,6 +31,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\globalOpenGL.h" />
+    <ClInclude Include="src\globalThings.h" />
     <ClInclude Include="src\MeshObj\cMeshObj.h" />
     <ClInclude Include="src\Shader\cShaderManager.h" />
     <ClInclude Include="src\VAOManager\cModelDrawInfo.h" />

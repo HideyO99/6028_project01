@@ -33,6 +33,6 @@ void main()
     fNormal.xyz = normalize(mModelInverseTranspose * vec4(vNormal.xyz, 1.0f)).xyz;
 	fNormal.w = 1.0f;
 
-    fColour = vColour;
+    fColour = vec4(vColour.rgb/0xff,1.0f);
 
 }

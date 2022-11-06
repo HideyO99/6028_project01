@@ -52,9 +52,7 @@ bool cShaderManager::createShaderProgram(std::string callSign, cShader& vertex_s
 	//create program
 	cShaderProgram currentProgram;
 	currentProgram.ID = glCreateProgram();
-	//glBindAttribLocation(currentProgram.ID, 0, "vPosition");
-	//glBindAttribLocation(currentProgram.ID, 1, "vNormal");
-	//glBindAttribLocation(currentProgram.ID, 2, "vColour");
+
 	glAttachShader(currentProgram.ID, vertex_shader.ID);
 	glAttachShader(currentProgram.ID, fragment_shader.ID);
 	glLinkProgram(currentProgram.ID);
