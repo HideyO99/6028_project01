@@ -11,9 +11,8 @@ uniform vec4 RGBA_Colour;
 void main()
 {
     vec3 materialColour = fColour.rgb;
-    //materialColour = RGBA_Colour.rgb;
+    //materialColour = RGBA_Colour.rgb/0xff;
 
     pixelOutputColour = vec4(materialColour.rgb, 1.0f);
-    //gl_FragColor = vec4(0.5f,0.9f,0.1f, 1.0f);
     
 }

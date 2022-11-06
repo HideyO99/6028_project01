@@ -23,21 +23,6 @@
 #define VERTEX_SHADER_FILE      "src/shader/vertexShader.glsl"
 #define FRAGMENT_SHADER_FILE    "src/shader/fragmentShader.glsl"
 
-static const struct
-{
-    float x, y, z; //hw add z coordiante
-    float r, g, b;
-} vertices[] =
-{
-    { -0.6f, -0.4f, 0.0f, 1.f, 0.f, 0.f },
-    {  0.6f, -0.4f, 0.0f, 0.f, 1.f, 0.f },
-    {   0.f,  0.6f, 0.0f, 0.f, 0.f, 1.f },
-                    
-    { -0.6f, -0.4f, 1.0f, 0.0f, 1.0f, 0.0f },
-    {  0.6f, -0.4f, 1.0f, 0.0f, 0.0f, 1.0f },
-    {  0.0f,  0.6f, 1.0f, 1.0f, 0.0f, 0.0f }
-};
-
 glm::vec3 g_cameraEye = glm::vec3(0.0, 100.0, -300.0f);
 glm::vec3 g_cameraTarget = glm::vec3(0.0f, 0.0f, 0.0f);
 
@@ -145,7 +130,7 @@ int main(void)
 
     pShaderManager->useShaderPRogram("Shader01");
     shaderID = pShaderManager->getIDfromName("Shader01");
-    glUseProgram(shaderID);
+    //glUseProgram(shaderID);
 
     //todo lighting
     
@@ -177,10 +162,7 @@ int main(void)
 
     vec_pMeshObjects.push_back(pTerrain);
 
-    //GLint mvp_location = glGetUniformLocation(shaderID, "MVP");       // program
-    GLint mModel_location = glGetUniformLocation(shaderID, "mModel");
-    GLint mView_location = glGetUniformLocation(shaderID, "mView");
-    GLint mProjection_location = glGetUniformLocation(shaderID, "mProjection");
+
 
     while (!glfwWindowShouldClose(window))
     {
@@ -242,9 +224,9 @@ int main(void)
 
             matModel = matModel * matScale;
 
-            glUniformMatrix4fv(mModel_location, 1, GL_FALSE, glm::value_ptr(matModel));
-            glUniformMatrix4fv(mView_location, 1, GL_FALSE, glm::value_ptr(matView));
-            glUniformMatrix4fv(mProjection_location, 1, GL_FALSE, glm::value_ptr(matProjection));
+            pShaderManager->setShaderUniformM4fv("mModel", matModel);
+            pShaderManager->setShaderUniformM4fv("mView", matView);
+            pShaderManager->setShaderUniformM4fv("mProjection", matProjection);
 
             // Wireframe
             if (pCurrentMeshObject->isWireframe)
@@ -256,13 +238,11 @@ int main(void)
                 glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
             }
 
-            GLint RGBA_Colour_ULocID = glGetUniformLocation(shaderID, "RGBA_Colour");
-
-            glUniform4f(RGBA_Colour_ULocID,
-                pCurrentMeshObject->color_RGBA.r,
-                pCurrentMeshObject->color_RGBA.g,
-                pCurrentMeshObject->color_RGBA.b,
-                pCurrentMeshObject->color_RGBA.w);
+            pShaderManager->setShaderUniform4f("RGBA_Colour",
+                                               pCurrentMeshObject->color_RGBA.r,
+                                               pCurrentMeshObject->color_RGBA.g,
+                                               pCurrentMeshObject->color_RGBA.b,
+                                               pCurrentMeshObject->color_RGBA.w);
 
             cModelDrawInfo drawingInformation;
             if (pVAOManager->FindDrawInfo(pCurrentMeshObject->meshName, drawingInformation))
