@@ -17,6 +17,7 @@
 #include <sstream>
 #include "Shader/cShaderManager.h"
 #include "VAOManager/cVAOManager.h"
+#include "MeshObj/cMeshObj.h"
 
 #define MODEL_LIST_XML          "asset/model.xml"
 #define VERTEX_SHADER_FILE      "src/shader/vertexShader.glsl"
@@ -37,7 +38,7 @@ static const struct
     {  0.0f,  0.6f, 1.0f, 1.0f, 0.0f, 0.0f }
 };
 
-glm::vec3 g_cameraEye = glm::vec3(0.0, 0.0, -4.0f);
+glm::vec3 g_cameraEye = glm::vec3(0.0, 100.0, -300.0f);
 glm::vec3 g_cameraTarget = glm::vec3(0.0f, 0.0f, 0.0f);
 
 
@@ -92,7 +93,7 @@ int main(void)
     std::cout << "starting..\n";
     GLFWwindow* window;
     GLuint vertex_buffer, vertex_shader, fragment_shader, program;
-    GLint mvp_location, vpos_location, vcol_location;
+    //GLint mvp_location, vpos_location, vcol_location;
     GLuint shaderID = 0;
 
     glfwSetErrorCallback(error_callback);
@@ -130,7 +131,12 @@ int main(void)
     if (!result)
     {
         std::cout << "error: Shader compilation fail" << std::endl;
-        return -1;
+
+        glfwDestroyWindow(window);
+
+        delete pShaderManager;
+        glfwTerminate();
+        exit(EXIT_FAILURE);
     }
     else
     {
@@ -149,80 +155,136 @@ int main(void)
     result = pVAOManager->loadModelList(MODEL_LIST_XML, shaderID);
     if (!result)
     {
-        return -1;
+        std::cout << "cannot load model list" << std::endl;
+
+        glfwDestroyWindow(window);
+
+        delete pVAOManager;
+        delete pShaderManager;
+
+        glfwTerminate();
+        exit(EXIT_FAILURE);
     }
+    cMeshObj* pTerrain = new cMeshObj();
+    pTerrain->meshName = "terrain";
+    pTerrain->position = glm::vec3(0.0f, -25.0f, -50.0f);
+    pTerrain->isWireframe = false;
+    pTerrain->isVisible = true;
+    pTerrain->scale = 0.5f;
+    pTerrain->color_RGBA = glm::vec4(187.0f, 195.0f, 41.0f, 255);
 
-    ////define model
-    //glGenBuffers(1, &vertex_buffer);
-    //glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer);
-    //glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    std::vector< cMeshObj* > vec_pMeshObjects;
 
-    ////vertex layout
-    //mvp_location = glGetUniformLocation(shaderID, "MVP");
-    //vpos_location = glGetAttribLocation(shaderID, "vPosition"); //vertex position
-    //vcol_location = glGetAttribLocation(shaderID, "vColour");
+    vec_pMeshObjects.push_back(pTerrain);
 
-    //glEnableVertexAttribArray(vpos_location);
-    //glVertexAttribPointer(vpos_location,
-    //    3,
-    //    GL_FLOAT,
-    //    GL_FALSE,
-    //    sizeof(vertices[0]),
-    //    (void*)0);
-    //glEnableVertexAttribArray(vcol_location);
-    //glVertexAttribPointer(vcol_location,
-    //    3,
-    //    GL_FLOAT,
-    //    GL_FALSE,
-    //    sizeof(vertices[0]),
-    //    (void*)(sizeof(float) * 3));
+    //GLint mvp_location = glGetUniformLocation(shaderID, "MVP");       // program
+    GLint mModel_location = glGetUniformLocation(shaderID, "mModel");
+    GLint mView_location = glGetUniformLocation(shaderID, "mView");
+    GLint mProjection_location = glGetUniformLocation(shaderID, "mProjection");
 
     while (!glfwWindowShouldClose(window))
     {
         float ratio;
         int width, height;
-        //mat4x4 m, p, mvp;
-        glm::mat4x4 m, p, mvp;
+        glm::mat4x4 matModel;
+        glm::mat4x4 matProjection;
+        glm::mat4x4 matView;
 
         glfwGetFramebufferSize(window, &width, &height);
         ratio = width / (float)height;
 
         glViewport(0, 0, width, height);
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        //mat4x4_identity(m);
-        m = glm::mat4x4(1.0f); // make an identity matrix
-        //mat4x4_rotate_Z(m, m, (float)glfwGetTime());
-        //mat4x4_ortho(p, -ratio, ratio, -1.f, 1.f, 1.f, -1.f);
-        //mat4x4_mul(mvp, p, m);
-
-        //glUseProgram(program);
-        //glUniformMatrix4fv(mvp_location, 1, GL_FALSE, (const GLfloat*)mvp);
-        //glDrawArrays(GL_TRIANGLES, 0, 3);
-
-        //glfwSwapBuffers(window);
-        //glfwPollEvents();
-        p = glm::perspective(0.6f,
-            ratio,
-            0.1f,
-            1000.0f);
-
-        glm::mat4x4 v = glm::mat4(1.0f);
-
-        //glm::vec3 cameraEye = glm::vec3(0.0, 0.0, -4.0f);
-        //glm::vec3 cameraTarget = glm::vec3(0.0f, 0.0f, 0.0f);
         glm::vec3 upVector = glm::vec3(0.0f, 1.0f, 0.0f);
 
-        v = glm::lookAt(g_cameraEye,
-            g_cameraTarget,
-            upVector);
+        matView = glm::lookAt(::g_cameraEye, ::g_cameraTarget, upVector);
 
-        //        mat4x4_mul(mvp, p, m);
-        mvp = p * v * m;
+        //GLint eyeLocation_UniLoc = glGetUniformLocation(shaderID, "eyeLocation");
 
-       // glUseProgram(program);
-        //glUniformMatrix4fv(mvp_location, 1, GL_FALSE, glm::value_ptr(mvp));
-        glDrawArrays(GL_TRIANGLES, 0, 6);
+        //glUniform4f(eyeLocation_UniLoc, ::g_cameraEye.x, ::g_cameraEye.y, ::g_cameraEye.z, 1.0f);
+
+        matProjection = glm::perspective( 0.6f, ratio, 0.1f, 10000.0f);
+
+        for (std::vector< cMeshObj* >::iterator itCurrentMesh = vec_pMeshObjects.begin();
+            itCurrentMesh != vec_pMeshObjects.end();
+            itCurrentMesh++)
+        {
+            cMeshObj* pCurrentMeshObject = *itCurrentMesh;        // * is the iterator access thing
+
+            if (!pCurrentMeshObject->isVisible)
+            {
+                // Skip the rest of the loop
+                continue;
+            }
+
+            // 
+                    // Don't draw any "back facing" triangles
+            glCullFace(GL_BACK);
+
+            // Turn on depth buffer test at draw time
+            glEnable(GL_DEPTH_TEST);
+
+            matModel = glm::mat4x4(1.0f);  // identity matrix
+
+            // Move the object 
+            glm::mat4 matTranslation = glm::translate(glm::mat4(1.0f),
+                pCurrentMeshObject->position);
+
+
+            // Scale the object
+            float uniformScale = pCurrentMeshObject->scale;
+            glm::mat4 matScale = glm::scale(glm::mat4(1.0f),
+                glm::vec3(uniformScale, uniformScale, uniformScale));
+
+            matModel = matModel * matTranslation;
+
+
+            matModel = matModel * matScale;
+
+            glUniformMatrix4fv(mModel_location, 1, GL_FALSE, glm::value_ptr(matModel));
+            glUniformMatrix4fv(mView_location, 1, GL_FALSE, glm::value_ptr(matView));
+            glUniformMatrix4fv(mProjection_location, 1, GL_FALSE, glm::value_ptr(matProjection));
+
+            // Wireframe
+            if (pCurrentMeshObject->isWireframe)
+            {
+                glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);      // GL_POINT, GL_LINE, GL_FILL
+            }
+            else
+            {
+                glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+            }
+
+            GLint RGBA_Colour_ULocID = glGetUniformLocation(shaderID, "RGBA_Colour");
+
+            glUniform4f(RGBA_Colour_ULocID,
+                pCurrentMeshObject->color_RGBA.r,
+                pCurrentMeshObject->color_RGBA.g,
+                pCurrentMeshObject->color_RGBA.b,
+                pCurrentMeshObject->color_RGBA.a);
+
+            cModelDrawInfo drawingInformation;
+            if (pVAOManager->FindDrawInfo(pCurrentMeshObject->meshName, drawingInformation))
+            {
+                glBindVertexArray(drawingInformation.VAO_ID);
+
+                glDrawElements(GL_TRIANGLES,
+                    drawingInformation.numberOfIndices,
+                    GL_UNSIGNED_INT,
+                    (void*)0);
+
+                glBindVertexArray(0);
+
+            }
+            else
+            {
+                // Didn't find that model
+                std::cout << "Error: didn't find model to draw." << std::endl;
+
+            }//if ( pVAOManager..
+        }
+        //glDrawArrays(GL_TRIANGLES, 0, 6);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
@@ -233,6 +295,9 @@ int main(void)
     }
 
     glfwDestroyWindow(window);
+
+    delete pVAOManager;
+    delete pShaderManager;
 
     glfwTerminate();
     exit(EXIT_SUCCESS);

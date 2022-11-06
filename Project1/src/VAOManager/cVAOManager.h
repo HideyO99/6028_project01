@@ -1,10 +1,11 @@
 #pragma once
 #include "..\globalOpenGL.h"
 #include "cModelDrawInfo.h"
-#include "cXML.h"
+#include "..\XML\cXML.h"
 #include <string>
 #include <map>
 #include <fstream>
+#include "../MeshObj/cMeshObj.h"
 
 #define MODEL_LOAD_BUFFER 10000
 class cVAOManager
@@ -23,6 +24,8 @@ public:
 	bool loadModelList(std::string filename, unsigned int shaderProgramID);
 	bool FindDrawInfo(std::string filename, cModelDrawInfo& drawInfo);
 	bool loadPLYFile(std::string filename, cModelDrawInfo& modelDrawInfo, std::string error);
+
+	std::map<std::string, cMeshObj> mapModelNametoMeshObj;
 
 private:
 	std::map<std::string, cModelDrawInfo> mapModelNametoVAOID;

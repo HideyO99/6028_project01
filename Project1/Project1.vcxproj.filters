@@ -19,6 +19,12 @@
     <Filter Include="VAOManager">
       <UniqueIdentifier>{9ceab1f8-035b-4946-8587-ee13cf6fa647}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MeshObj">
+      <UniqueIdentifier>{024f189c-428c-427f-90c0-faaf2a7a29e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="XML">
+      <UniqueIdentifier>{fe4f6c34-e989-40a6-96e8-993feeb2586f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\glad.c">
@@ -42,25 +48,31 @@
     <ClCompile Include="src\VAOManager\cVAOManager.cpp">
       <Filter>VAOManager</Filter>
     </ClCompile>
-    <ClCompile Include="src\VAOManager\cXML.cpp">
-      <Filter>VAOManager</Filter>
+    <ClCompile Include="src\MeshObj\cMeshObj.cpp">
+      <Filter>MeshObj</Filter>
+    </ClCompile>
+    <ClCompile Include="src\XML\cXML.cpp">
+      <Filter>XML</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Shader\cShaderManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\globalOpenGL.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\VAOManager\cVAOManager.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\MeshObj\cMeshObj.h">
+      <Filter>MeshObj</Filter>
     </ClInclude>
     <ClInclude Include="src\VAOManager\cModelDrawInfo.h">
-      <Filter>Header Files</Filter>
+      <Filter>VAOManager</Filter>
     </ClInclude>
-    <ClInclude Include="src\VAOManager\cXML.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\Shader\cShaderManager.h">
+      <Filter>VAOManager</Filter>
+    </ClInclude>
+    <ClInclude Include="src\VAOManager\cVAOManager.h">
+      <Filter>VAOManager</Filter>
+    </ClInclude>
+    <ClInclude Include="src\XML\cXML.h">
+      <Filter>XML</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

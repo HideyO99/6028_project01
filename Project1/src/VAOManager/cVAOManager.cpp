@@ -10,13 +10,15 @@ cVAOManager::~cVAOManager()
 
 bool cVAOManager::loadModelToVAO(std::string filename, cModelDrawInfo& drawInfo, unsigned int shaderProgramID)
 {
+	GLenum error;
+	
 	drawInfo.meshName = filename;
 
 	drawInfo.CalculateExtents();
 
 	glGenVertexArrays(1, &(drawInfo.VAO_ID));
 	glBindVertexArray(drawInfo.VAO_ID);
-	
+
 	//vertices
 	glGenBuffers(1, &(drawInfo.VertexBufferID));
 	glBindBuffer(GL_ARRAY_BUFFER, drawInfo.VertexBufferID);
@@ -24,11 +26,11 @@ bool cVAOManager::loadModelToVAO(std::string filename, cModelDrawInfo& drawInfo,
 
 	//indices
 	glGenBuffers(1, &(drawInfo.IndexBufferID));
-	glBindBuffer(GL_ELEMENT_ARRAY_BARRIER_BIT, drawInfo.IndexBufferID);
-	glBufferData(GL_ELEMENT_ARRAY_BARRIER_BIT, sizeof(unsigned int) * drawInfo.numberOfIndices, (GLvoid*)drawInfo.pIndices, GL_STATIC_DRAW);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, drawInfo.IndexBufferID);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * drawInfo.numberOfIndices, (GLvoid*)drawInfo.pIndices, GL_STATIC_DRAW);
 
 	//in vec3 vPosition;			
-	GLint vPosition_location = glGetAttribLocation(shaderProgramID, "vPosition");
+	GLint vPosition_location = 0; //glGetAttribLocation(shaderProgramID, "vPosition");
 	glEnableVertexAttribArray(vPosition_location);
 	glVertexAttribPointer(vPosition_location,
 		3, 
@@ -38,25 +40,28 @@ bool cVAOManager::loadModelToVAO(std::string filename, cModelDrawInfo& drawInfo,
 		(void*)offsetof(cModelDrawInfo::sVertex_XYZ_N, x));		// Offset the member variable
 
 	//in vec3 vNormal;			
-	GLint vNormal_location = glGetAttribLocation(shaderProgramID, "vNormal");
+	GLint vNormal_location = 1; //glGetAttribLocation(shaderProgramID, "vNormal");
+	error = glGetError();
 	glEnableVertexAttribArray(vNormal_location);
+	error = glGetError();
 	glVertexAttribPointer(vNormal_location,
 		3, 
 		GL_FLOAT,
 		GL_FALSE,
 		sizeof(cModelDrawInfo::sVertex_XYZ_N),						// Stride	(number of bytes)
 		(void*)offsetof(cModelDrawInfo::sVertex_XYZ_N, nx));		// Offset the member variable
-
+	error = glGetError();
 	//in vec4 vPosition;			
-	GLint vColour_location = glGetAttribLocation(shaderProgramID, "vColour");
+	GLint vColour_location = 2; //glGetAttribLocation(shaderProgramID, "vColour");
 	glEnableVertexAttribArray(vColour_location);
+	error = glGetError();
 	glVertexAttribPointer(vColour_location,
 		4,
 		GL_FLOAT,
 		GL_FALSE,
 		sizeof(cModelDrawInfo::sVertex_XYZ_N),						// Stride	(number of bytes)
 		(void*)offsetof(cModelDrawInfo::sVertex_XYZ_N, r));		// Offset the member variable
-
+	error = glGetError();
 	glBindVertexArray(0);
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -87,6 +92,7 @@ bool cVAOManager::loadModelList(std::string filename, unsigned int shaderProgram
 	for (i_mapModel = modelListXML.mapModelNameAndPath.begin(); i_mapModel != modelListXML.mapModelNameAndPath.end(); i_mapModel++)
 	{
 		cModelDrawInfo modelDrawInfo;
+		//cMeshObj meshObj;
 		std::string error = "";
 		result = loadPLYFile(i_mapModel->second, modelDrawInfo, error);
 		if (!result)
@@ -101,6 +107,8 @@ bool cVAOManager::loadModelList(std::string filename, unsigned int shaderProgram
 			std::cout << "cannot load " << i_mapModel->first << std::endl;
 			return false;
 		}
+
+		//mapModelNametoMeshObj.emplace(i_mapModel->first, meshObj);
 		std::cout << i_mapModel->first << " is loaded" << std::endl;
 	}
 	

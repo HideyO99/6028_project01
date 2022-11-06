@@ -6,8 +6,14 @@ in vec4 fVertWorldLocation;	// using only matModel
 
 out vec4 pixelOutputColour;
 
+uniform vec4 RGBA_Colour;
+
 void main()
 {
-    pixelOutputColour = fColour;
+    vec3 materialColour = fColour.rgb;
+    materialColour = RGBA_Colour.rgb;
+
+    pixelOutputColour = vec4(materialColour.rgb, 1.0f);
+    //gl_FragColor = vec4(materialColour.rgb, 1.0f);
     
 }

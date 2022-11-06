@@ -21,19 +21,21 @@
   <ItemGroup>
     <ClCompile Include="src\glad.c" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\MeshObj\cMeshObj.cpp" />
     <ClCompile Include="src\Shader\cShader.cpp" />
     <ClCompile Include="src\Shader\cShaderManager.cpp" />
     <ClCompile Include="src\Shader\cShaderProgram.cpp" />
     <ClCompile Include="src\VAOManager\cModelDrawInfo.cpp" />
     <ClCompile Include="src\VAOManager\cVAOManager.cpp" />
-    <ClCompile Include="src\VAOManager\cXML.cpp" />
+    <ClCompile Include="src\XML\cXML.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\globalOpenGL.h" />
+    <ClInclude Include="src\MeshObj\cMeshObj.h" />
     <ClInclude Include="src\Shader\cShaderManager.h" />
     <ClInclude Include="src\VAOManager\cModelDrawInfo.h" />
     <ClInclude Include="src\VAOManager\cVAOManager.h" />
-    <ClInclude Include="src\VAOManager\cXML.h" />
+    <ClInclude Include="src\XML\cXML.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\Shader\fragmentShader.glsl" />
