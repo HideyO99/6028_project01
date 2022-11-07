@@ -116,6 +116,12 @@ void cShaderManager::setShaderUniformM4fv(std::string name, glm::mat4 value)
 	glUniformMatrix4fv(glGetUniformLocation(shaderID, name.c_str()), 1, GL_FALSE, glm::value_ptr(value));
 }
 
+void cShaderManager::setShaderUniform1f(std::string name, float value)
+{
+	GLint lo = glGetUniformLocation(shaderID, name.c_str());
+	glUniform1f(lo, value);
+}
+
 void cShaderManager::setShaderUniform4f(std::string name, const float value1, const float value2, const float value3, const float value4)
 {
 	GLint lo = glGetUniformLocation(shaderID, name.c_str());

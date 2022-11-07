@@ -9,13 +9,47 @@
 			<rotateY>0</rotateY>
 			<rotateZ>0</rotateZ>
 		</modelInstance>
-		<modelInstance>terrain02
-			<posX>1</posX>
-			<posY>2</posY>
-			<posZ>3</posZ>
-			<rotateX>4</rotateX>
-			<rotateY>5</rotateY>
-			<rotateZ>6</rotateZ>
+	</model>
+	<model name="sphere">asset/model/ISO_Shphere_flat_3div_xyz_n_rgba_uv.ply
+		<modelInstance>sphere01
+			<posX>0</posX>
+			<posY>0</posY>
+			<posZ>0</posZ>
+			<rotateX>0</rotateX>
+			<rotateY>0</rotateY>
+			<rotateZ>0</rotateZ>
+		</modelInstance>
+		<modelInstance>sphere02
+			<posX>0</posX>
+			<posY>0</posY>
+			<posZ>0</posZ>
+			<rotateX>0</rotateX>
+			<rotateY>0</rotateY>
+			<rotateZ>0</rotateZ>
+		</modelInstance>
+		<modelInstance>sphere03
+			<posX>0</posX>
+			<posY>0</posY>
+			<posZ>0</posZ>
+			<rotateX>0</rotateX>
+			<rotateY>0</rotateY>
+			<rotateZ>0</rotateZ>
+		</modelInstance>
+		<modelInstance>sphere04
+			<posX>0</posX>
+			<posY>0</posY>
+			<posZ>0</posZ>
+			<rotateX>0</rotateX>
+			<rotateY>0</rotateY>
+			<rotateZ>0</rotateZ>
+		</modelInstance>
+		<modelInstance>sphere05
+			<posX>0</posX>
+			<posY>0</posY>
+			<posZ>0</posZ>
+			<rotateX>0</rotateX>
+			<rotateY>0</rotateY>
+			<rotateZ>0</rotateZ>
 		</modelInstance>
 	</model>
 </PLYMODEL>

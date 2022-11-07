@@ -25,6 +25,7 @@ struct sLight
 
 uniform vec4 eyeLocation;
 uniform vec4 RGBA_Color;
+uniform bool bDoNotLight;
 uniform sLight Light[MAX_LIGHT_SOURCE];
 
 uniform vec4 specularColour;			// RGB object hightlight COLOUR
@@ -44,7 +45,13 @@ void main()
     materialColor = RGBA_Color.rgb;
     
     //vec3 ambient = 0.6 * materialColor;
-    
+    if ( bDoNotLight )
+	{
+		// Set the output colour and exit early
+		// (Don't apply the lighting to this)
+		pixelOutputColor = vec4(materialColor.rgb, 1);
+		return;
+	}
     vec3 normal = normalize(fNormal.xyz);
 	for(int i = 0; i < MAX_LIGHT_SOURCE; i++)
 	{

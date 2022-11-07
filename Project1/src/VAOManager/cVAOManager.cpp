@@ -292,3 +292,28 @@ bool cVAOManager::setInstanceObjVisible(std::string meshObjName, bool value)
 
 	return true;
 }
+
+bool cVAOManager::setInstanceObjLighting(std::string meshObjName, bool value)
+{
+	std::map<std::string, cMeshObj* >::iterator itCurrentMesh = mapInstanceNametoMeshObj.find(meshObjName);
+	if (itCurrentMesh == mapInstanceNametoMeshObj.end())
+	{
+		return false;
+	}
+	cMeshObj* pCurrentMeshObject = itCurrentMesh->second;
+	pCurrentMeshObject->bDoNotLight = !value;
+	return true;
+}
+
+bool cVAOManager::setInstanceObjSpecularPower(std::string meshObjName, glm::vec4 value)
+{
+	std::map<std::string, cMeshObj* >::iterator itCurrentMesh = mapInstanceNametoMeshObj.find(meshObjName);
+	if (itCurrentMesh == mapInstanceNametoMeshObj.end())
+	{
+		return false;
+	}
+	cMeshObj* pCurrentMeshObject = itCurrentMesh->second;
+	pCurrentMeshObject->specular_colour_and_power = value;
+
+	return true;
+}

@@ -28,6 +28,8 @@ public:
 	bool setInstanceObjWireframe(std::string meshObjName, bool value);
 	bool setInstanceObjRGB(std::string meshObjName, glm::vec4 value);
 	bool setInstanceObjVisible(std::string meshObjName, bool value);
+	bool setInstanceObjLighting(std::string meshObjName, bool value);
+	bool setInstanceObjSpecularPower(std::string meshObjName, glm::vec4 value);
 
 	std::map<std::string, cMeshObj*> mapInstanceNametoMeshObj;
 	glm::vec3 cameraEyeFromXML;

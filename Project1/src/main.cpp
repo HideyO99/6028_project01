@@ -172,8 +172,30 @@ int main(void)
     ::g_cameraEye = pVAOManager->cameraEyeFromXML;
 
     //setup object
-    result = pVAOManager->setInstanceObjVisible("terrain01", true);
+    //result = pVAOManager->setInstanceObjVisible("terrain01", true);
     result = pVAOManager->setInstanceObjRGB("terrain01", glm::vec4(1.f,1.f,1.f,1.f));
+    result = pVAOManager->setInstanceObjSpecularPower("terrain01", glm::vec4(1.0f, 1.0f, 1.0f, 1000.0f));
+
+   // result = pVAOManager->setInstanceObjVisible("sphere01", true);
+    result = pVAOManager->setInstanceObjRGB("sphere01", glm::vec4(1.f, 1.f, 1.f, 1.f));
+    result = pVAOManager->setInstanceObjWireframe("sphere01", true);
+    result = pVAOManager->setInstanceObjWireframe("sphere01", true);
+
+    //result = pVAOManager->setInstanceObjVisible("sphere02", true);
+    result = pVAOManager->setInstanceObjRGB("sphere02", glm::vec4(1.f, 0.f, 0.f, 1.f));
+    result = pVAOManager->setInstanceObjWireframe("sphere02", true);
+
+    //result = pVAOManager->setInstanceObjVisible("sphere03", true);
+    result = pVAOManager->setInstanceObjRGB("sphere03", glm::vec4(0.f, 1.f, 0.f, 1.f));
+    result = pVAOManager->setInstanceObjWireframe("sphere03", true);
+
+    //result = pVAOManager->setInstanceObjVisible("sphere04", true);
+    result = pVAOManager->setInstanceObjRGB("sphere04", glm::vec4(0.f, 0.f, 1.f, 1.f));
+    result = pVAOManager->setInstanceObjWireframe("sphere04", true);
+
+    //result = pVAOManager->setInstanceObjVisible("sphere05", true);
+    result = pVAOManager->setInstanceObjRGB("sphere05", glm::vec4(0.f, 1.f, 1.f, 1.f));
+    result = pVAOManager->setInstanceObjWireframe("sphere05", true);
     //result = pVAOManager->setInstanceObjVisible("terrain02", true);
     //result = pVAOManager->setInstanceObjScale("terrain02", 0.5);
 
@@ -294,6 +316,22 @@ void updateInstanceObj(cShaderManager* pShaderManager, cVAOManager* pVAOManager,
             pCurrentMeshObject->color_RGBA.b,
             pCurrentMeshObject->color_RGBA.w);
 
+        pShaderManager->setShaderUniform4f("specularColour",
+            pCurrentMeshObject->specular_colour_and_power.r,
+            pCurrentMeshObject->specular_colour_and_power.g,
+            pCurrentMeshObject->specular_colour_and_power.b,
+            pCurrentMeshObject->specular_colour_and_power.w);
+
+        //uniform bool bDoNotLight;	
+        if (pCurrentMeshObject->bDoNotLight)
+        {
+            pShaderManager->setShaderUniform1f("bDoNotLight", (GLfloat)GL_TRUE);
+        }
+        else
+        {
+            pShaderManager->setShaderUniform1f("bDoNotLight", (GLfloat)GL_FALSE);
+        }
+
         cModelDrawInfo drawingInformation;
         if (pVAOManager->FindDrawInfo(pCurrentMeshObject->meshName, drawingInformation))
         {
@@ -356,4 +394,5 @@ void light3Setup()
 
 void light4Setup()
 {
-}
+    }
+
