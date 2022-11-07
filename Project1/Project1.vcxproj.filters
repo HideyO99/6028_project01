@@ -80,9 +80,6 @@
     <ClInclude Include="src\XML\cXML.h">
       <Filter>XML</Filter>
     </ClInclude>
-    <ClInclude Include="src\globalThings.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\Shader\cShaderManager.h">
       <Filter>Shaders</Filter>
     </ClInclude>

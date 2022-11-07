@@ -125,6 +125,7 @@ bool cVAOManager::loadModelList(std::string filename, unsigned int shaderProgram
 		//mapModelNametoMeshObj.emplace(i_mapModel->first, meshObj);
 		std::cout << i_mapModel->first << " is loaded" << std::endl;
 	}
+	cameraEyeFromXML = modelListXML.cameraEyeFromXML;
 	
 
 	return true;
@@ -233,5 +234,61 @@ bool cVAOManager::loadPLYFile(std::string filename, cModelDrawInfo& modelDrawInf
 		modelDrawInfo.pIndices[vertex_element_index_index + 2] = pTheModelTriangleArray[i].vertexIndices[2];
 		vertex_element_index_index += 3;
 	}
+	return true;
+}
+
+bool cVAOManager::setInstanceObjScale(std::string meshObjName, float value)
+{
+	std::map<std::string, cMeshObj* >::iterator itCurrentMesh = mapInstanceNametoMeshObj.find(meshObjName);
+	if (itCurrentMesh== mapInstanceNametoMeshObj.end())
+	{
+		return false;
+	}
+	cMeshObj* pCurrentMeshObject = itCurrentMesh->second;
+
+	pCurrentMeshObject->scale = value;
+
+	return true;
+}
+
+bool cVAOManager::setInstanceObjWireframe(std::string meshObjName, bool value)
+{
+	std::map<std::string, cMeshObj* >::iterator itCurrentMesh = mapInstanceNametoMeshObj.find(meshObjName);
+	if (itCurrentMesh == mapInstanceNametoMeshObj.end())
+	{
+		return false;
+	}
+	cMeshObj* pCurrentMeshObject = itCurrentMesh->second;
+
+	pCurrentMeshObject->isWireframe = value;
+
+	return true;
+}
+
+bool cVAOManager::setInstanceObjRGB(std::string meshObjName, glm::vec4 value)
+{
+	std::map<std::string, cMeshObj* >::iterator itCurrentMesh = mapInstanceNametoMeshObj.find(meshObjName);
+	if (itCurrentMesh == mapInstanceNametoMeshObj.end())
+	{
+		return false;
+	}
+	cMeshObj* pCurrentMeshObject = itCurrentMesh->second;
+
+	pCurrentMeshObject->color_RGBA = value;
+
+	return true;
+}
+
+bool cVAOManager::setInstanceObjVisible(std::string meshObjName, bool value)
+{
+	std::map<std::string, cMeshObj* >::iterator itCurrentMesh = mapInstanceNametoMeshObj.find(meshObjName);
+	if (itCurrentMesh == mapInstanceNametoMeshObj.end())
+	{
+		return false;
+	}
+	cMeshObj* pCurrentMeshObject = itCurrentMesh->second;
+
+	pCurrentMeshObject->isVisible = value;
+
 	return true;
 }

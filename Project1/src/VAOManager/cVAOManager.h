@@ -24,8 +24,13 @@ public:
 	bool loadModelList(std::string filename, unsigned int shaderProgramID);
 	bool FindDrawInfo(std::string filename, cModelDrawInfo& drawInfo);
 	bool loadPLYFile(std::string filename, cModelDrawInfo& modelDrawInfo, std::string error);
+	bool setInstanceObjScale(std::string meshObjName, float value);
+	bool setInstanceObjWireframe(std::string meshObjName, bool value);
+	bool setInstanceObjRGB(std::string meshObjName, glm::vec4 value);
+	bool setInstanceObjVisible(std::string meshObjName, bool value);
 
 	std::map<std::string, cMeshObj*> mapInstanceNametoMeshObj;
+	glm::vec3 cameraEyeFromXML;
 
 private:
 	std::map<std::string, cModelDrawInfo> mapModelNametoVAOID;

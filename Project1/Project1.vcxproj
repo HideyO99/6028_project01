@@ -33,7 +33,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\globalOpenGL.h" />
-    <ClInclude Include="src\globalThings.h" />
     <ClInclude Include="src\Light\cLight.h" />
     <ClInclude Include="src\Light\cLightManager.h" />
     <ClInclude Include="src\MeshObj\cMeshObj.h" />

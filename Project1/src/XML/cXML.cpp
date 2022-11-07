@@ -55,6 +55,7 @@ bool cXML::loadModelFromXML(std::string filename, std::map<std::string, cMeshObj
 			cMeshObj* pModedelInsance = new cMeshObj();
 			instance.erase(std::remove(instance.begin(), instance.end(), '\n'), instance.cend());
 			instance.erase(std::remove(instance.begin(), instance.end(), '\t'), instance.cend());
+			pModedelInsance->meshName = modelName;
 			pModedelInsance->instanceName = instance;
 			pModedelInsance->position.x = std::stof(node_lv3.child("posX").child_value());
 			pModedelInsance->position.y = std::stof(node_lv3.child("posY").child_value());
@@ -85,7 +86,7 @@ bool cXML::loadModelFromXML(std::string filename, std::map<std::string, cMeshObj
 	cameraEyeFromXML.x = std::stof(tempXYZ[0]);
 	cameraEyeFromXML.y = std::stof(tempXYZ[1]);
 	cameraEyeFromXML.z = std::stof(tempXYZ[2]);
-
+	
 	return true;
 }
 
