@@ -25,7 +25,7 @@ public:
 	bool FindDrawInfo(std::string filename, cModelDrawInfo& drawInfo);
 	bool loadPLYFile(std::string filename, cModelDrawInfo& modelDrawInfo, std::string error);
 
-	std::map<std::string, cMeshObj> mapModelNametoMeshObj;
+	std::map<std::string, cMeshObj*> mapInstanceNametoMeshObj;
 
 private:
 	std::map<std::string, cModelDrawInfo> mapModelNametoVAOID;
