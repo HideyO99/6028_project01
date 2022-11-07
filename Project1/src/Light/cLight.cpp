@@ -7,14 +7,18 @@ cLight::cLight()
 	this->specular = glm::vec4(1.f, 1.f, 1.f, 1.f);
 	this->attenuation = glm::vec4(0.1f, 0.1f, 0.f, 1.f);
 	this->direction = glm::vec4(0.f, 0.f, 1.f, 1.f);
-	param1 = glm::vec4(0.f, 0.f, 0.f, 1.f);
-	param2 = glm::vec4(0.f, 0.f, 0.f, 1.f);
+	this->angle = glm::vec2(0.f, 0.f);
+	this->type = LIGHT_UNDEF;
+	this->turnON = 0;
 
 	position_location = -1;
 	diffuse_location = -1;
 	specular_location = -1;
 	attenuation_location = -1;
 	direction_location = -1;
+	angle_location = -1;
+	type_location = -1;
+	turnON_location = -1;
 }
 
 cLight::~cLight()

@@ -3,13 +3,15 @@
 #include "cLight.h"
 #include <string>
 
+#define MAX_LIGHT_SOURCE 5
+
 class cLightManager
 {
 public:
 	cLightManager();
 	~cLightManager();
 
-	cLight veclight;
+	cLight light[MAX_LIGHT_SOURCE];
 
 	void loadLightUniformLocation(unsigned int shaderID);
 	void setLightToShader(unsigned int shaderID);

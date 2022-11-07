@@ -76,6 +76,11 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 }
 
 void updateInstanceObj(cShaderManager* pShaderManager, cVAOManager* pVAOManager, glm::mat4x4 matView, glm::mat4x4 matProjection);
+void light0Setup();
+void light1Setup();
+void light2Setup();
+void light3Setup();
+void light4Setup();
 
 int main(void)
 {
@@ -143,13 +148,9 @@ int main(void)
 
     ::g_pTheLightManager->loadLightUniformLocation(shaderID);
 
-    ::g_pTheLightManager->veclight.param1.x = 2.f;
-    //::g_pTheLightManager->veclight.param1.y = 10.f;
-    //::g_pTheLightManager->veclight.param1.z = 20.f;
-    ::g_pTheLightManager->veclight.diffuse = glm::vec4(1.f);
-    ::g_pTheLightManager->veclight.direction = glm::vec4(0.0f, -1.0f, 0.0f, 1.0f);
-    //::g_pTheLightManager->veclight.position = glm::vec4(0.0f, 500.0f, 500.0f, 1.0f);
-    //::g_pTheLightManager->veclight.attenuation = glm::vec4(0.1f, 0.001f, 0.0000001f, 1.0f);
+    light0Setup();
+    light1Setup();
+    //light2Setup();
     
     
     //load model
@@ -172,8 +173,9 @@ int main(void)
 
     //setup object
     result = pVAOManager->setInstanceObjVisible("terrain01", true);
-    result = pVAOManager->setInstanceObjVisible("terrain02", true);
-    result = pVAOManager->setInstanceObjScale("terrain02", 0.5);
+    result = pVAOManager->setInstanceObjRGB("terrain01", glm::vec4(1.f,1.f,1.f,1.f));
+    //result = pVAOManager->setInstanceObjVisible("terrain02", true);
+    //result = pVAOManager->setInstanceObjScale("terrain02", 0.5);
 
     while (!glfwWindowShouldClose(window))
     {
@@ -246,7 +248,9 @@ void updateInstanceObj(cShaderManager* pShaderManager, cVAOManager* pVAOManager,
 
         // Move the object 
         glm::mat4 matTranslation = glm::translate(glm::mat4(1.0f), pCurrentMeshObject->position);
-
+        
+        //std::cout << pCurrentMeshObject->instanceName << " position x = " << pCurrentMeshObject->position.x << " y = " << pCurrentMeshObject->position.y << " z = " << pCurrentMeshObject->position.z << std::endl;
+        
         //rotate
         glm::mat4 matRoationZ = glm::rotate(glm::mat4(1.0f), pCurrentMeshObject->rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
         glm::mat4 matRoationY = glm::rotate(glm::mat4(1.0f), pCurrentMeshObject->rotation.y, glm::vec3(0.0f, 1.0f, 0.0f));
@@ -284,7 +288,7 @@ void updateInstanceObj(cShaderManager* pShaderManager, cVAOManager* pVAOManager,
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-        pShaderManager->setShaderUniform4f("RGBA_Colour",
+        pShaderManager->setShaderUniform4f("RGBA_Color",
             pCurrentMeshObject->color_RGBA.r,
             pCurrentMeshObject->color_RGBA.g,
             pCurrentMeshObject->color_RGBA.b,
@@ -307,4 +311,49 @@ void updateInstanceObj(cShaderManager* pShaderManager, cVAOManager* pVAOManager,
 
         }
     }
+}
+
+void light0Setup()
+{
+    ::g_pTheLightManager->light[0].position = glm::vec4(0.0f, 100.0f, 0.0f, 1.0f);
+    ::g_pTheLightManager->light[0].diffuse = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+    ::g_pTheLightManager->light[0].attenuation = glm::vec4(0.01f, 0.01f, 0.0000001f, 1.0f);
+    ::g_pTheLightManager->light[0].type = cLight::LightType::LIGHT_SPOT;
+    ::g_pTheLightManager->light[0].direction = glm::vec4(0.0f, -1.0f, 0.0f, 1.0f);
+
+    // inner and outer angles
+    ::g_pTheLightManager->light[0].angle.x = 10.0f;     // Degrees
+    ::g_pTheLightManager->light[0].angle.y = 20.0f;     // Degrees
+
+    ::g_pTheLightManager->light[0].turnON = 1;
+}
+
+void light1Setup()
+{
+    ::g_pTheLightManager->light[1].type = cLight::LightType::LIGHT_DIRECTION;  // 2 means directional
+    // No position or attenuation
+    ::g_pTheLightManager->light[1].diffuse = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+    ::g_pTheLightManager->light[1].direction = glm::vec4(0.0f, -1.0f, 0.0f, 1.0f);
+    ::g_pTheLightManager->light[1].turnON = 1;
+
+    // BE CAREFUL about the direction and colour, since "colour" is really brightness.
+    // (i.e. there NO attenuation)
+
+
+}
+void light2Setup()
+{
+    ::g_pTheLightManager->light[2].type = cLight::LightType::LIGHT_POINT;
+    ::g_pTheLightManager->light[2].diffuse = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+    ::g_pTheLightManager->light[2].position = glm::vec4(500.0f, 500.0f, 500.0f, 1.0f);
+    ::g_pTheLightManager->light[2].attenuation = glm::vec4(0.1f, 0.001f, 0.0000001f, 1.0f);
+    ::g_pTheLightManager->light[2].turnON = 1;
+}
+
+void light3Setup()
+{
+}
+
+void light4Setup()
+{
 }
