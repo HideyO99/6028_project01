@@ -3,8 +3,8 @@
 cShaderManager::cShaderProgram::cShaderProgram()
 {
 	this->ID = 0;
-	callsign.clear();
-	mapUniformNameToUniformLocation.clear();
+	this->callsign.clear();
+	this->mapUniformNameToUniformLocation.clear();
 }
 
 cShaderManager::cShaderProgram::~cShaderProgram()

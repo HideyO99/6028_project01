@@ -11,6 +11,7 @@ public:
 
 	std::string meshName;
 	glm::vec3 position;
+	glm::vec3 rotation;
 	float scale;
 	bool isWireframe;
 	glm::vec4 color_RGBA;

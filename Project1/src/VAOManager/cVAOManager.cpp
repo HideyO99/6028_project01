@@ -52,16 +52,29 @@ bool cVAOManager::loadModelToVAO(std::string filename, cModelDrawInfo& drawInfo,
 		(void*)offsetof(cModelDrawInfo::sVertex_XYZ_N_UV, nx));		// Offset the member variable
 	error = glGetError();
 	//in vec4 vPosition;			
-	GLint vColour_location = glGetAttribLocation(shaderProgramID, "vColour");
-	glEnableVertexAttribArray(vColour_location);
+	GLint vColor_location = glGetAttribLocation(shaderProgramID, "vColor");
+	glEnableVertexAttribArray(vColor_location);
 	error = glGetError();
-	glVertexAttribPointer(vColour_location,
+	glVertexAttribPointer(vColor_location,
 		4,
 		GL_FLOAT,
 		GL_FALSE,
 		sizeof(cModelDrawInfo::sVertex_XYZ_N_UV),						// Stride	(number of bytes)
 		(void*)offsetof(cModelDrawInfo::sVertex_XYZ_N_UV, r));		// Offset the member variable
 	error = glGetError();
+
+	//in vec2 vTextureUV;			
+	GLint vTextureUV_location = glGetAttribLocation(shaderProgramID, "vTextureUV");
+	error = glGetError();
+	glEnableVertexAttribArray(vTextureUV_location);
+	error = glGetError();
+	glVertexAttribPointer(vTextureUV_location,
+		2, GL_FLOAT,
+		GL_FALSE,
+		sizeof(cModelDrawInfo::sVertex_XYZ_N_UV),						// Stride	(number of bytes)
+		(void*)offsetof(cModelDrawInfo::sVertex_XYZ_N_UV, u));		// Offset the member variable
+	error = glGetError();
+
 	glBindVertexArray(0);
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -69,7 +82,8 @@ bool cVAOManager::loadModelToVAO(std::string filename, cModelDrawInfo& drawInfo,
 
 	glDisableVertexAttribArray(vPosition_location);
 	glDisableVertexAttribArray(vNormal_location);
-	glDisableVertexAttribArray(vColour_location);
+	glDisableVertexAttribArray(vColor_location);
+	glDisableVertexAttribArray(vTextureUV_location);
 
 	this->mapModelNametoVAOID[drawInfo.meshName] = drawInfo;
 

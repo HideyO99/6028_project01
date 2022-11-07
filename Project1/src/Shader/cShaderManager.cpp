@@ -3,10 +3,10 @@
 
 cShaderManager::cShaderManager()
 {
-	shaderID = 0;
-	lastError.clear();
-	mapIDtoShader.clear();
-	mapNameToID.clear();
+	this->shaderID = 0;
+	this->lastError.clear();
+	this->mapIDtoShader.clear();
+	this->mapNameToID.clear();
 }
 
 cShaderManager::~cShaderManager()
@@ -67,8 +67,9 @@ bool cShaderManager::createShaderProgram(std::string callSign, cShader& vertex_s
 	{
 		return false;
 	}
-	//glDeleteShader(vertex_shader.ID);
-	//glDeleteShader(fragment_shader.ID);
+
+	glDeleteShader(vertex_shader.ID);
+	glDeleteShader(fragment_shader.ID);
 
 	currentProgram.callsign = callSign;
 
@@ -117,7 +118,8 @@ void cShaderManager::setShaderUniformM4fv(std::string name, glm::mat4 value)
 
 void cShaderManager::setShaderUniform4f(std::string name, const float value1, const float value2, const float value3, const float value4)
 {
-	glUniform4f(glGetUniformLocation(shaderID, name.c_str()), value1, value2, value3, value4);
+	GLint lo = glGetUniformLocation(shaderID, name.c_str());
+	glUniform4f(lo, value1, value2, value3, value4);
 }
 
 

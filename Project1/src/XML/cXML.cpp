@@ -2,7 +2,7 @@
 
 cXML::cXML()
 {
-	mapModelNameAndPath.clear();
+	this->mapModelNameAndPath.clear();
 }
 
 cXML::~cXML()

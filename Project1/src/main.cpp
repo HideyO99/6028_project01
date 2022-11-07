@@ -18,6 +18,7 @@
 #include "Shader/cShaderManager.h"
 #include "VAOManager/cVAOManager.h"
 #include "MeshObj/cMeshObj.h"
+#include "Light/cLightManager.h"
 
 #define MODEL_LIST_XML          "asset/model.xml"
 #define VERTEX_SHADER_FILE      "src/shader/vertexShader.glsl"
@@ -26,6 +27,7 @@
 //glm::vec3 g_cameraEye = glm::vec3(0.0, 100.0, -300.0f);
 glm::vec3 g_cameraEye = glm::vec3(0.0, 100.0, 300.0f);
 glm::vec3 g_cameraTarget = glm::vec3(5.0f, 0.0f, 0.0f);
+cLightManager* g_pTheLightManager = NULL;
 
 
 static void error_callback(int error, const char* description)
@@ -136,6 +138,18 @@ int main(void)
     //glUseProgram(shaderID);
 
     //todo lighting
+    ::g_pTheLightManager = new cLightManager();
+
+    ::g_pTheLightManager->loadLightUniformLocation(shaderID);
+
+    ::g_pTheLightManager->veclight.param1.x = 2.f;
+    //::g_pTheLightManager->veclight.param1.y = 10.f;
+    //::g_pTheLightManager->veclight.param1.z = 20.f;
+    ::g_pTheLightManager->veclight.diffuse = glm::vec4(1.f);
+    ::g_pTheLightManager->veclight.direction = glm::vec4(0.0f, -1.0f, 0.0f, 1.0f);
+    //::g_pTheLightManager->veclight.position = glm::vec4(0.0f, 500.0f, 500.0f, 1.0f);
+    //::g_pTheLightManager->veclight.attenuation = glm::vec4(0.1f, 0.001f, 0.0000001f, 1.0f);
+    
     
     //load model
     cVAOManager* pVAOManager = new cVAOManager();
@@ -169,6 +183,8 @@ int main(void)
 
     while (!glfwWindowShouldClose(window))
     {
+        ::g_pTheLightManager->setLightToShader(shaderID);
+
         float ratio;
         int width, height;
         glm::mat4x4 matModel;
@@ -184,6 +200,10 @@ int main(void)
         glm::vec3 upVector = glm::vec3(0.0f, 1.0f, 0.0f);
 
         matView = glm::lookAt(::g_cameraEye, ::g_cameraTarget, upVector);
+
+        GLint eyeLocation_UniLoc = glGetUniformLocation(shaderID, "eyeLocation");
+
+        glUniform4f(eyeLocation_UniLoc, ::g_cameraEye.x, ::g_cameraEye.y, ::g_cameraEye.z, 1.0f);
 
         matProjection = glm::perspective( 0.6f, ratio, 0.1f, 10000.0f);
 
@@ -209,23 +229,31 @@ int main(void)
             matModel = glm::mat4x4(1.0f);  // identity matrix
 
             // Move the object 
-            glm::mat4 matTranslation = glm::translate(glm::mat4(1.0f),
-                pCurrentMeshObject->position);
+            glm::mat4 matTranslation = glm::translate(glm::mat4(1.0f), pCurrentMeshObject->position);
 
+            //rotate
+            glm::mat4 matRoationZ = glm::rotate(glm::mat4(1.0f), pCurrentMeshObject->rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
+            glm::mat4 matRoationY = glm::rotate(glm::mat4(1.0f), pCurrentMeshObject->rotation.y, glm::vec3(0.0f, 1.0f, 0.0f));
+            glm::mat4 matRoationX = glm::rotate(glm::mat4(1.0f), pCurrentMeshObject->rotation.x, glm::vec3(1.0f, 0.0f, 0.0f));
 
             // Scale the object
             float uniformScale = pCurrentMeshObject->scale;
-            glm::mat4 matScale = glm::scale(glm::mat4(1.0f),
-                glm::vec3(uniformScale, uniformScale, uniformScale));
+            glm::mat4 matScale = glm::scale(glm::mat4(1.0f), glm::vec3(uniformScale, uniformScale, uniformScale));
 
             matModel = matModel * matTranslation;
 
+            matModel = matModel * matRoationX;
+            matModel = matModel * matRoationY;
+            matModel = matModel * matRoationZ;
 
             matModel = matModel * matScale;
 
             pShaderManager->setShaderUniformM4fv("mModel", matModel);
             pShaderManager->setShaderUniformM4fv("mView", matView);
             pShaderManager->setShaderUniformM4fv("mProjection", matProjection);
+
+            glm::mat4 mModelInverseTransform = glm::inverse(glm::transpose(matModel));
+            pShaderManager->setShaderUniformM4fv("mModelInverseTranspose", mModelInverseTransform);
 
             // Wireframe
             if (pCurrentMeshObject->isWireframe)
@@ -237,21 +265,25 @@ int main(void)
                 glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
             }
 
+            glEnable(GL_BLEND);
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
             pShaderManager->setShaderUniform4f("RGBA_Colour",
                                                pCurrentMeshObject->color_RGBA.r,
                                                pCurrentMeshObject->color_RGBA.g,
                                                pCurrentMeshObject->color_RGBA.b,
                                                pCurrentMeshObject->color_RGBA.w);
 
+            //pShaderManager->setShaderUniform4f("Light_Color", 1.0f, 1.0f, 1.0f, 1.0f);
+            //pShaderManager->setShaderUniform4f("lightPos", -100.0f, 100.0f, 0.0f, 1.0f);
+            //pShaderManager->setShaderUniform4f("viewPos", 0.0f, 100.0f, 300.0f, 1.0f);
+
             cModelDrawInfo drawingInformation;
             if (pVAOManager->FindDrawInfo(pCurrentMeshObject->meshName, drawingInformation))
             {
                 glBindVertexArray(drawingInformation.VAO_ID);
 
-                glDrawElements(GL_TRIANGLES,
-                    drawingInformation.numberOfIndices,
-                    GL_UNSIGNED_INT,
-                    (void*)0);
+                glDrawElements(GL_TRIANGLES, drawingInformation.numberOfIndices, GL_UNSIGNED_INT, (void*)0);
 
                 glBindVertexArray(0);
 
