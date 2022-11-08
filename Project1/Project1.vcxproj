@@ -20,8 +20,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\glad.c" />
+    <ClCompile Include="src\Light\cDirLight.cpp" />
     <ClCompile Include="src\Light\cLight.cpp" />
     <ClCompile Include="src\Light\cLightManager.cpp" />
+    <ClCompile Include="src\Light\cPointLight.cpp" />
+    <ClCompile Include="src\Light\cSpotLight.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\MeshObj\cMeshObj.cpp" />
     <ClCompile Include="src\Shader\cShader.cpp" />
@@ -33,8 +36,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\globalOpenGL.h" />
+    <ClInclude Include="src\Light\cDirLight.h" />
     <ClInclude Include="src\Light\cLight.h" />
     <ClInclude Include="src\Light\cLightManager.h" />
+    <ClInclude Include="src\Light\cPointLight.h" />
+    <ClInclude Include="src\Light\cSpotLight.h" />
     <ClInclude Include="src\MeshObj\cMeshObj.h" />
     <ClInclude Include="src\Shader\cShaderManager.h" />
     <ClInclude Include="src\VAOManager\cModelDrawInfo.h" />

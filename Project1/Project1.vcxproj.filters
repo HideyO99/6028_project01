@@ -28,6 +28,9 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
+    <Filter Include="Texture">
+      <UniqueIdentifier>{d33c3412-491e-459c-91bd-025284eac33e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\glad.c">
@@ -63,6 +66,15 @@
     <ClCompile Include="src\Light\cLightManager.cpp">
       <Filter>Light</Filter>
     </ClCompile>
+    <ClCompile Include="src\Light\cDirLight.cpp">
+      <Filter>Light</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Light\cPointLight.cpp">
+      <Filter>Light</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Light\cSpotLight.cpp">
+      <Filter>Light</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\globalOpenGL.h">
@@ -87,6 +99,15 @@
       <Filter>Light</Filter>
     </ClInclude>
     <ClInclude Include="src\Light\cLightManager.h">
+      <Filter>Light</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Light\cDirLight.h">
+      <Filter>Light</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Light\cPointLight.h">
+      <Filter>Light</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Light\cSpotLight.h">
       <Filter>Light</Filter>
     </ClInclude>
   </ItemGroup>

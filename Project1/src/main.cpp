@@ -150,7 +150,7 @@ int main(void)
 
     light0Setup();
     light1Setup();
-    //light2Setup();
+    light2Setup();
     
     
     //load model
@@ -353,39 +353,44 @@ void updateInstanceObj(cShaderManager* pShaderManager, cVAOManager* pVAOManager,
 
 void light0Setup()
 {
-    ::g_pTheLightManager->light[0].position = glm::vec4(0.0f, 100.0f, 0.0f, 1.0f);
-    ::g_pTheLightManager->light[0].diffuse = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
-    ::g_pTheLightManager->light[0].attenuation = glm::vec4(0.01f, 0.01f, 0.0000001f, 1.0f);
-    ::g_pTheLightManager->light[0].type = cLight::LightType::LIGHT_SPOT;
-    ::g_pTheLightManager->light[0].direction = glm::vec4(0.0f, -1.0f, 0.0f, 1.0f);
+    //spot light
+    ::g_pTheLightManager->spotLight[0].position = glm::vec4(0.0f, 100.0f, 0.0f, 1.0f);
+    ::g_pTheLightManager->spotLight[0].direction = glm::vec4(0.0f, -1.0f, 0.0f, 1.0f);
+    ::g_pTheLightManager->spotLight[0].diffuse = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+    ::g_pTheLightManager->spotLight[0].specular = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+    ::g_pTheLightManager->spotLight[0].ambient = 0.35f;
+    ::g_pTheLightManager->spotLight[0].constant = 0.01f;
+    ::g_pTheLightManager->spotLight[0].linear = 0.01f;
+    ::g_pTheLightManager->spotLight[0].quadratic = 0.0000001f;
 
     // inner and outer angles
-    ::g_pTheLightManager->light[0].angle.x = 10.0f;     // Degrees
-    ::g_pTheLightManager->light[0].angle.y = 20.0f;     // Degrees
+    ::g_pTheLightManager->spotLight[0].innerAngle = 10.0f;     // Degrees
+    ::g_pTheLightManager->spotLight[0].outerAngle = 20.0f;     // Degrees
 
-    ::g_pTheLightManager->light[0].turnON = 1;
+    ::g_pTheLightManager->spotLight[0].turnON = 1;
 }
 
 void light1Setup()
 {
-    ::g_pTheLightManager->light[1].type = cLight::LightType::LIGHT_DIRECTION;  // 2 means directional
-    // No position or attenuation
-    ::g_pTheLightManager->light[1].diffuse = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
-    ::g_pTheLightManager->light[1].direction = glm::vec4(0.0f, -1.0f, 0.0f, 1.0f);
-    ::g_pTheLightManager->light[1].turnON = 1;
-
-    // BE CAREFUL about the direction and colour, since "colour" is really brightness.
-    // (i.e. there NO attenuation)
-
+    //directional light
+    ::g_pTheLightManager->directionLight.direction = glm::vec4(0.0f, -1.0f, 0.0f, 1.0f);
+    ::g_pTheLightManager->directionLight.diffuse = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+    ::g_pTheLightManager->directionLight.ambient = 0.35f;
+    ::g_pTheLightManager->directionLight.specular = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+    ::g_pTheLightManager->directionLight.turnON = 1;
 
 }
 void light2Setup()
 {
-    ::g_pTheLightManager->light[2].type = cLight::LightType::LIGHT_POINT;
-    ::g_pTheLightManager->light[2].diffuse = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
-    ::g_pTheLightManager->light[2].position = glm::vec4(500.0f, 500.0f, 500.0f, 1.0f);
-    ::g_pTheLightManager->light[2].attenuation = glm::vec4(0.1f, 0.001f, 0.0000001f, 1.0f);
-    ::g_pTheLightManager->light[2].turnON = 1;
+    //point light
+    ::g_pTheLightManager->pointLight[0].position = glm::vec4(500.0f, 500.0f, 500.0f, 1.0f);
+    ::g_pTheLightManager->pointLight[0].ambient = 0.35f;
+    ::g_pTheLightManager->pointLight[0].diffuse = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+    ::g_pTheLightManager->pointLight[0].specular = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+    ::g_pTheLightManager->pointLight[0].constant = 0.01f;
+    ::g_pTheLightManager->pointLight[0].linear = 0.01f;
+    ::g_pTheLightManager->pointLight[0].quadratic = 0.0000001f;
+    ::g_pTheLightManager->pointLight[0].turnON = 1;
 }
 
 void light3Setup()

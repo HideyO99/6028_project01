@@ -36,9 +36,9 @@ public:
 	int type_location;
 	int turnON_location;
 
-	void setConstantAttenuation(float newConstAtten);
-	void setLinearAttenuation(float newLinearAtten);
-	void setQuadraticAttenuation(float newQuadAtten);
+	virtual void setConstantAttenuation(float newConstAtten);
+	virtual void setLinearAttenuation(float newLinearAtten);
+	virtual void setQuadraticAttenuation(float newQuadAtten);
 
 
 };

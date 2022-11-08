@@ -8,27 +8,61 @@ in vec2 fTextureUV;
 #define MAX_LIGHT_SOURCE 5
 out vec4 pixelOutputColor;
 
-struct sLight
-{
-	vec4 position;			
-	vec4 diffuse;	
-	vec4 specular;	    // rgb = highlight colour, w = power
-	vec4 attenuation;	// x = constant, y = linear, z = quadratic, w = DistanceCutOff
-	vec4 direction;	    // Spot, directional lights
-	vec2 angle;	    	// x = inner angle, y = outer angle
-	int type;
-	                    // 0 = pointlight
-					    // 1 = spot light
-					    // 2 = directional light
-	int turnON;			// 0 for off, 1 for on	    
+
+struct Material {
+    sampler2D diffuse;
+    sampler2D specular;
+    float shininess;
+}; 
+
+struct DirLight {
+    vec4 direction;
+    float ambient;
+    vec4 diffuse;
+    vec4 specular;
+	int turnON;
 };
+
+struct PointLight {
+    vec4 position;
+    
+    float constant;
+    float linear;
+    float quadratic;
+	
+    float ambient;
+    vec4 diffuse;
+    vec4 specular;
+	int turnON;
+};
+
+struct SpotLight {
+    vec4 position;
+    vec4 direction;
+    float innerAngle;
+    float outerAngle;
+  
+    float constant;
+    float linear;
+    float quadratic;
+  
+    float ambient;
+    vec4 diffuse;
+    vec4 specular; 
+	int turnON;	
+};
+
+uniform DirLight dirLight;
+uniform PointLight pointLights[MAX_LIGHT_SOURCE];
+uniform SpotLight spotLight[MAX_LIGHT_SOURCE];
+uniform Material material;
 
 uniform vec4 eyeLocation;
 uniform vec4 RGBA_Color;
 uniform bool bDoNotLight;
-uniform sLight Light[MAX_LIGHT_SOURCE];
+//uniform sLight Light[MAX_LIGHT_SOURCE];
 
-uniform vec4 specularColour;			// RGB object hightlight COLOUR
+//uniform vec4 specularColor;			// RGB object hightlight COLOUR
 										// For most material, this is white (1,1,1)
 										// For metals google "metal specular hightlight colour"
 										// For plastic, it's the same colour as the diffuse
@@ -37,9 +71,13 @@ uniform vec4 specularColour;			// RGB object hightlight COLOUR
 										//	1 = not shiny 
 										// 10 = "meh" shiny
 
+vec3 calDirectionalLight(DirLight light,vec3 normal,vec3 viewDirection);
+vec3 calPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir);
+vec3 calSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDirection);
+
 void main()
 {
-	vec4 finalObjectColour = vec4( 0.0f, 0.0f, 0.0f, 1.0f );
+	vec3 finalObjectColour = vec3( 0.0f, 0.0f, 0.0f);
 	
     vec3 materialColor = fColor.rgb;
     materialColor = RGBA_Color.rgb;
@@ -53,75 +91,124 @@ void main()
 		return;
 	}
     vec3 normal = normalize(fNormal.xyz);
+	vec3 eyeVector = normalize(eyeLocation.xyz - fVertWorldLocation.xyz);
+	//Directional Light
+	finalObjectColour = calDirectionalLight(dirLight, normal, eyeVector);
+	//Point Light
 	for(int i = 0; i < MAX_LIGHT_SOURCE; i++)
 	{
-		if(Light[i].turnON == 0)
-		{
-			continue;
-		}
-		
-		if( Light[i].type == 2)
-		{
-			vec3 lightContrib = Light[i].diffuse.rgb;
-			float dotProd = dot(-Light[i].direction.xyz, normal);//normalize(normal.xyz));
-			dotProd = max( 0.0f, dotProd);
-			lightContrib *= dotProd;
-			finalObjectColour.rgb += (materialColor.rgb * Light[i].diffuse.rgb * lightContrib);
-			continue;
-		}
-		
-		vec3 vLightToVertex = Light[i].position.xyz - fVertWorldLocation.xyz;
-		float distanceToLight = length(vLightToVertex);
-		vec3 lightVector = normalize(vLightToVertex);
-		float dotProduct = dot(lightVector, fNormal.xyz);
-		dotProduct = max( 0.0f, dotProduct );
-		vec3 lightDiffuseContrib = dotProduct * Light[i].diffuse.rgb;
-		
-		vec3 lightSpecularContrib = vec3(0.0f);
-		//if(Light[i].type == 0)
-		//{
-			vec3 reflectVector = reflect( -lightVector, normal);//normalize(normal.xyz) );
-			
-			vec3 eyeVector = normalize(eyeLocation.xyz - fVertWorldLocation.xyz);
-			float objectSpecularPower = specularColour.w;
-			lightSpecularContrib = pow( max(0.0f, dot( eyeVector, reflectVector) ), objectSpecularPower ) * (specularColour.rgb * Light[i].specular.rgb);
-			
-			float atten = 1.0f /( Light[i].attenuation.x + Light[i].attenuation.y * distanceToLight +	Light[i].attenuation.z * distanceToLight*distanceToLight );  
-			
-			lightDiffuseContrib *= atten;
-			lightSpecularContrib *= atten;
-		//}
-		
-		if(Light[i].type == 1)
-		{
-			vec3 vertexToLight = normalize(fVertWorldLocation.xyz - Light[i].position.xyz);
-			
-			float currentLightRayAngle = dot( vertexToLight.xyz, Light[i].direction.xyz );
-			
-			currentLightRayAngle = max(0.0f, currentLightRayAngle);
-			float outerConeAngleCos = cos(radians(Light[i].angle.y));
-			float innerConeAngleCos = cos(radians(Light[i].angle.x));
-			
-			if ( currentLightRayAngle < outerConeAngleCos )
-			{
-				// Nope. so it's in the dark
-				lightDiffuseContrib = vec3(0.0f, 0.0f, 0.0f);
-				lightSpecularContrib = vec3(0.0f, 0.0f, 0.0f);
-			}
-			else if ( currentLightRayAngle < innerConeAngleCos )
-			{
+		finalObjectColour += calPointLight(pointLights[i], normal, fVertWorldLocation.xyz, eyeVector);
 	
-				float penumbraRatio = (currentLightRayAngle - outerConeAngleCos) / 
-									(innerConeAngleCos - outerConeAngleCos);
-									
-				lightDiffuseContrib *= penumbraRatio;
-				lightSpecularContrib *= penumbraRatio;
-			}		
-		}
-		
-		finalObjectColour.rgb += (materialColor.rgb * lightDiffuseContrib.rgb) + (specularColour.rgb  * lightSpecularContrib.rgb );
+		//Spot Light
+		finalObjectColour += calSpotLight(spotLight[i],normal,fVertWorldLocation.xyz, eyeVector);
 	}
-	pixelOutputColor = vec4(finalObjectColour.rgb, 1.0);
-	vec3 ambient = 0.35 * materialColor;
-	pixelOutputColor.rgb += ambient;
+	pixelOutputColor = vec4(finalObjectColour, 1.0);
 }
+
+vec3 calDirectionalLight(DirLight light, vec3 normal, vec3 viewDirection)
+{
+	vec3 ambient = light.ambient * vec3(texture(material.diffuse, fTextureUV));
+	if(light.turnON == 0)
+	{
+		return ambient ;
+	}
+	vec3 lightDirection = normalize(-light.direction.xyz);
+	
+	//diffuse shading
+	float diff = max(dot(normal, lightDirection), 0.0);
+	
+	//specular shading
+	vec3 halfwayDir = normalize(lightDirection + viewDirection);
+	float spec = pow(max(dot(viewDirection, halfwayDir), 0.0), material.shininess);
+	//vec3 reflectDirection = reflect(-lightDirection, normal);
+	//float spec = pow(max(dot(viewDirection, reflectDirection), 0.0), material.shininess);
+	
+	
+	vec3 diffuse = light.diffuse.xyz * diff * vec3(texture(material.diffuse, fTextureUV));
+	vec3 specular = light.specular.rgb * spec * vec3(texture(material.diffuse, fTextureUV));
+	
+	return(ambient + diffuse + specular);
+}
+
+vec3 calPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDirection)
+{
+	vec3 ambient = light.ambient * vec3(texture(material.diffuse, fTextureUV));
+	if(light.turnON == 0)
+	{
+		return ambient ;
+	}
+	vec3 lightDirection = normalize(light.position.xyz - fragPos);
+	
+	// diffuse shading
+	float diff = max(dot(normal, lightDirection), 0.0);
+	
+	// specular shading
+	vec3 halfwayDir = normalize(lightDirection + viewDirection);
+	float spec = pow(max(dot(viewDirection, halfwayDir), 0.0), material.shininess);
+	//vec3 reflectDirection = reflect(-lightDirection, normal);
+	//float spec = pow(max(dot(viewDirection, reflectDirection), 0.0), material.shininess);
+	
+	// attenuation
+	float distance = length(light.position.xyz - fragPos);
+	float attenuation = 1.0 / (light.constant + light.linear * distance + light.quadratic * (distance * distance));
+	
+	// combine results
+	//vec3 ambient = light.ambient * vec3(texture(material.diffuse, fTextureUV));
+	vec3 diffuse = light.diffuse.xyz * diff * vec3(texture(material.diffuse, fTextureUV));
+	vec3 specular = light.specular.rgb * spec * vec3(texture(material.specular, fTextureUV));
+	ambient *= attenuation;
+	diffuse *= attenuation;
+	specular *= attenuation;
+	
+	return (ambient + diffuse + specular);
+}
+
+vec3 calSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDirection)
+{
+	vec3 ambient = light.ambient * vec3(texture(material.diffuse, fTextureUV));
+	if(light.turnON == 0)
+	{
+		return ambient ;
+	}
+    vec3 lightDirection = normalize(light.position.xyz - fragPos);
+	
+    // diffuse shading
+    float diff = max(dot(normal, lightDirection), 0.0);
+	
+    // specular shading
+	vec3 halfwayDir = normalize(lightDirection + viewDirection);
+	float spec = pow(max(dot(viewDirection, halfwayDir), 0.0), material.shininess);
+	//vec3 reflectDirection = reflect(-lightDirection, normal);
+	//float spec = pow(max(dot(viewDirection, reflectDirection), 0.0), material.shininess);
+	
+    // attenuation
+    float distance = length(light.position.xyz - fragPos);
+    float attenuation = 1.0 / (light.constant + light.linear * distance + light.quadratic * (distance * distance));
+    
+    // spotlight intensity
+    float currentLightRayAngle = dot(lightDirection, normalize(-light.direction.xyz)); 
+	currentLightRayAngle = max(0.0f, currentLightRayAngle);
+	float outerConeAngleCos = cos(radians(light.outerAngle));
+	float innerConeAngleCos = cos(radians(light.innerAngle));
+	float intensity = 1;
+	if ( currentLightRayAngle < outerConeAngleCos )
+	{
+		intensity = 0;
+	}
+	else if ( currentLightRayAngle < innerConeAngleCos )
+	{
+		intensity = (currentLightRayAngle - outerConeAngleCos) / 
+					(innerConeAngleCos - outerConeAngleCos);
+	}
+	
+    // combine results
+    //vec3 ambient = light.ambient * vec3(texture(material.diffuse, fTextureUV));
+    vec3 diffuse = light.diffuse.xyz * diff * vec3(texture(material.diffuse, fTextureUV));
+    vec3 specular = light.specular.rgb * spec * vec3(texture(material.specular, fTextureUV));
+    ambient *= attenuation * intensity;
+    diffuse *= attenuation * intensity;
+    specular *= attenuation * intensity;
+	
+    return (ambient + diffuse + specular);
+}
+	
