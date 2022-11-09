@@ -5,6 +5,7 @@
 #include <map>
 #include <string>
 #include "../MeshObj/cMeshObj.h"
+#include "../Light/cLightManager.h"
 #include <vector>
 
 class cGUI
@@ -20,5 +21,6 @@ public:
 	bool ImGUI_update();
 
 	std::vector<cMeshObj*>* pVecInstanceMeshObj;
+	cLight* pLight[MAX_LIGHT_SOURCE];
 };
 

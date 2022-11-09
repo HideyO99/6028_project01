@@ -27,8 +27,18 @@
 #define VERTEX_SHADER_FILE      "src/shader/vertexShader.glsl"
 #define FRAGMENT_SHADER_FILE    "src/shader/fragmentShader.glsl"
 
-glm::vec3 g_cameraEye = glm::vec3(0.0, 0.0, 0.0f);
-glm::vec3 g_cameraTarget = glm::vec3(5.0f, 0.0f, 0.0f);
+glm::vec3 g_cameraEye = glm::vec3(0.0, 5.0, 0.0f);
+glm::vec3 g_cameraTarget = glm::vec3(0.0f, 0.0f, 0.0f);
+glm::vec3 g_upVector = glm::vec3(0.0f, 1.0f, 0.0f);
+glm::vec3 g_cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
+bool bIsWalkAround = false;
+bool firstMouse = true;
+float yaw = -90.0f;	
+float pitch = 0.0f;
+float lastX = 1280.0f / 2.0;
+float lastY = 800.0 / 2.0;
+float fov = 45.0f;
+
 cLightManager* g_pTheLightManager = NULL;
 static GLFWwindow* window = nullptr;
 
@@ -38,46 +48,9 @@ static void error_callback(int error, const char* description)
     fprintf(stderr, "Error: %s\n", description);
 }
 
-static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
-{
-    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
-        glfwSetWindowShouldClose(window, GLFW_TRUE);
-
-    //move camera
-    // AWSD AD-Left, Right
-    //      WS-Forward, Back
-    const float CAMERA_MOVE_SPEED = 1.f;
-    if (key == GLFW_KEY_A)
-    {
-        ::g_cameraEye.x -= CAMERA_MOVE_SPEED;
-    }
-    if (key == GLFW_KEY_D)
-    {
-        ::g_cameraEye.x += CAMERA_MOVE_SPEED;
-    }
-    if (key == GLFW_KEY_W)
-    {
-        ::g_cameraEye.z -= CAMERA_MOVE_SPEED;
-    }
-    if (key == GLFW_KEY_S)
-    {
-        ::g_cameraEye.z += CAMERA_MOVE_SPEED;
-    }
-    if (key == GLFW_KEY_Q)
-    {
-        ::g_cameraEye.y -= CAMERA_MOVE_SPEED;
-    }
-    if (key == GLFW_KEY_E)
-    {
-        ::g_cameraEye.y += CAMERA_MOVE_SPEED;
-    }
-    if (key == GLFW_KEY_SPACE)
-    {
-        //::g_cameraEye = glm::vec3(-5.5f, -3.4f, 15.0f);
-        ::g_cameraEye = glm::vec3(0.0, 100.0, 300.0f);
-        //::g_cameraTarget = glm::vec3(5.0f, 0.0f, 0.0f);
-    }
-}
+static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
+static void mouse_callback(GLFWwindow* window, double xposIn, double yposIn);
+static void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 
 void updateInstanceObj(cShaderManager* pShaderManager, cVAOManager* pVAOManager, glm::mat4x4 matView, glm::mat4x4 matProjection);
 void light0Setup();
@@ -116,6 +89,8 @@ int main(void)
     glfwSetKeyCallback(window, key_callback);
 
     glfwMakeContextCurrent(window);
+    glfwSetCursorPosCallback(window, mouse_callback);
+    glfwSetScrollCallback(window, scroll_callback);
     gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
     glfwSwapInterval(1);
 
@@ -163,7 +138,10 @@ int main(void)
     light2Setup();
     
     ::g_pTheLightManager->loadLightUniformLocation(shaderID);
-    
+    for (size_t i = 0; i < MAX_LIGHT_SOURCE; i++)
+    {
+        gui_->pLight[i] = ::g_pTheLightManager->plight[i];
+    }
     //load model
     cVAOManager* pVAOManager = new cVAOManager();
 
@@ -231,15 +209,23 @@ int main(void)
 
        
 
-        glm::vec3 upVector = glm::vec3(0.0f, 1.0f, 0.0f);
+        //glm::vec3 upVector = glm::vec3(0.0f, 1.0f, 0.0f);
+        glm::vec3 cameraDirection = glm::normalize(g_cameraEye - g_cameraTarget);
+        glm::vec3 cameraRight = glm::normalize(glm::cross(g_upVector, cameraDirection));
+        if (!bIsWalkAround)
+        {
 
-        matView = glm::lookAt(::g_cameraEye, ::g_cameraTarget, upVector);
-
+            matView = glm::lookAt(::g_cameraEye, ::g_cameraTarget, ::g_upVector);
+        }
+        else
+        {
+            matView = glm::lookAt(::g_cameraEye, ::g_cameraEye+::g_cameraFront, ::g_upVector);
+        }
         GLint eyeLocation_UniLoc = glGetUniformLocation(shaderID, "eyeLocation");
 
         glUniform4f(eyeLocation_UniLoc, ::g_cameraEye.x, ::g_cameraEye.y, ::g_cameraEye.z, 1.0f);
 
-        matProjection = glm::perspective( 0.6f, ratio, 0.1f, 10000.0f);
+        matProjection = glm::perspective(glm::radians(fov), ratio, 0.1f, 10000.0f);
 
         updateInstanceObj(pShaderManager, pVAOManager, matView, matProjection);
 
@@ -375,7 +361,7 @@ void light0Setup()
 {
     //cLight* plight1 = new cLight();
     //::g_pTheLightManager->plight[0] = plight1;
-  
+
     ::g_pTheLightManager->plight[0]->position = glm::vec4(0.0f, 100.0f, 0.0f, 1.0f);
     ::g_pTheLightManager->plight[0]->diffuse = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
     ::g_pTheLightManager->plight[0]->attenuation = glm::vec4(0.01f, 0.01f, 0.0000001f, 1.0f);
@@ -391,11 +377,17 @@ void light0Setup()
 
 void light1Setup()
 {
-    ::g_pTheLightManager->plight[1]->type = cLight::LightType::LIGHT_DIRECTION;  // 2 means directional
-    // No position or attenuation
-    ::g_pTheLightManager->plight[1]->diffuse = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
-    ::g_pTheLightManager->plight[1]->direction = glm::vec4(0.0f, -1.0f, 0.0f, 1.0f);
-    ::g_pTheLightManager->plight[1]->turnON = 1;
+    cDirLight* pDirLight = new cDirLight(*::g_pTheLightManager->plight[1]);
+    *pDirLight->pDirection = glm::vec4(0.0f, -1.0f, 0.0f, 1.0f);
+    *pDirLight->pDiffuse = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+    *pDirLight->pSpecular = glm::vec4(0.f, 0.5f, 0.5f, 1.f);
+    *pDirLight->pTurnON = 1;
+
+    //::g_pTheLightManager->plight[1]->type = cLight::LightType::LIGHT_DIRECTION;  // 2 means directional
+    //// No position or attenuation
+    //::g_pTheLightManager->plight[1]->diffuse = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+    //::g_pTheLightManager->plight[1]->direction = glm::vec4(0.0f, -1.0f, 0.0f, 1.0f);
+    //::g_pTheLightManager->plight[1]->turnON = 1;
 
     // BE CAREFUL about the direction and colour, since "colour" is really brightness.
     // (i.e. there NO attenuation)
@@ -418,4 +410,101 @@ void light3Setup()
 void light4Setup()
 {
     }
+
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+        glfwSetWindowShouldClose(window, GLFW_TRUE);
+
+    //move camera
+    // AWSD AD-Left, Right
+    //      WS-Forward, Back
+    const float CAMERA_MOVE_SPEED = 1.f;
+    if (key == GLFW_KEY_A)
+    {
+        ::g_cameraEye.x -= CAMERA_MOVE_SPEED;
+    }
+    if (key == GLFW_KEY_D)
+    {
+        ::g_cameraEye.x += CAMERA_MOVE_SPEED;
+    }
+    if (key == GLFW_KEY_W)
+    {
+        ::g_cameraEye.z -= CAMERA_MOVE_SPEED;
+    }
+    if (key == GLFW_KEY_S)
+    {
+        ::g_cameraEye.z += CAMERA_MOVE_SPEED;
+    }
+    if (key == GLFW_KEY_Q)
+    {
+        ::g_cameraEye.y -= CAMERA_MOVE_SPEED;
+    }
+    if (key == GLFW_KEY_E)
+    {
+        ::g_cameraEye.y += CAMERA_MOVE_SPEED;
+    }
+    if (key == GLFW_KEY_SPACE && action == GLFW_RELEASE)
+    {
+        //::g_cameraEye = glm::vec3(-5.5f, -3.4f, 15.0f);
+        //::g_cameraEye = glm::vec3(0.0, 100.0, 300.0f);
+        //::g_cameraTarget = glm::vec3(5.0f, 0.0f, 0.0f);
+        bIsWalkAround = !bIsWalkAround;
+
+    }
+}
+
+void mouse_callback(GLFWwindow* window, double xposIn, double yposIn)
+{
+    float xpos = static_cast<float>(xposIn);
+    float ypos = static_cast<float>(yposIn);
+
+    if (firstMouse)
+    {
+        lastX = xpos;
+        lastY = ypos;
+        firstMouse = false;
+    }
+    if (bIsWalkAround)
+    {
+
+
+        float xoffset = xpos - lastX;
+        float yoffset = lastY - ypos; // reversed since y-coordinates go from bottom to top
+        lastX = xpos;
+        lastY = ypos;
+
+        float sensitivity = 0.1f; // change this value to your liking
+        xoffset *= sensitivity;
+        yoffset *= sensitivity;
+
+        yaw += xoffset;
+        pitch += yoffset;
+
+        // make sure that when pitch is out of bounds, screen doesn't get flipped
+        if (pitch > 89.0f)
+            pitch = 89.0f;
+        if (pitch < -89.0f)
+            pitch = -89.0f;
+
+        glm::vec3 front;
+        front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
+        front.y = sin(glm::radians(pitch));
+        front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+        ::g_cameraFront = glm::normalize(front);
+    }
+    else
+    {
+        ::g_cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
+    }
+}
+
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
+{
+    fov -= (float)yoffset;
+    if (fov < 1.0f)
+        fov = 1.0f;
+    if (fov > 45.0f)
+        fov = 45.0f;
+}
 

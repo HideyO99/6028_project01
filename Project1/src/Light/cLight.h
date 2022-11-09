@@ -25,8 +25,6 @@ public:
 	LightType type;
 	int turnON;
 	
-
-
 	int position_location;
 	int diffuse_location;
 	int specular_location;
@@ -43,3 +41,18 @@ public:
 
 };
 
+class cDirLight
+{
+public:
+	cDirLight(cLight& allLights);
+	~cDirLight();
+
+	//glm::vec4* pPosition;
+	glm::vec4* pDiffuse;
+	glm::vec4* pSpecular;
+	//glm::vec4* pAttenuation;
+	glm::vec4* pDirection;
+	//glm::vec2* pAngle; //x = innet , y = outer
+	//cLight::LightType* type;
+	int* pTurnON;
+};

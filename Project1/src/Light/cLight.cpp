@@ -1,5 +1,6 @@
 #include "cLight.h"
 
+
 cLight::cLight()
 {
 	this->position = glm::vec4(0.f, 0.f, 0.f, 1.f);
@@ -38,4 +39,19 @@ void cLight::setLinearAttenuation(float newLinearAtten)
 void cLight::setQuadraticAttenuation(float newQuadAtten)
 {
 	this->attenuation.z = newQuadAtten;
+}
+
+
+cDirLight::cDirLight(cLight& allLights)
+{
+	this->pDirection = &allLights.direction;
+	this->pDiffuse = &allLights.diffuse;
+	this->pSpecular = &allLights.specular;
+	this->pTurnON = &allLights.turnON;
+	allLights.type = cLight::LIGHT_DIRECTION;
+	
+}
+
+cDirLight::~cDirLight()
+{
 }
