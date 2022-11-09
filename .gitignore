@@ -34,3 +34,8 @@ x64
 
 # Visual Studio 2015/2017 cache/options directory
 .vs/
+/Project1/src/Shader/fragmentShader - Copy.glsl
+/Project1/src/Texture/cMaterial.cpp
+/Project1/src/Texture/cMaterial.h
+/Project1/src/Texture/cTextureManager.cpp
+/Project1/src/Texture/cTextureManager.h

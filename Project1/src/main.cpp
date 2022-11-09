@@ -2,6 +2,8 @@
 #include <GLFW/glfw3.h>
 #include <glad/glad.h>
 
+
+
 #include <glm/glm.hpp>
 #include <glm/vec3.hpp> // glm::vec3        (x,y,z)
 #include <glm/vec4.hpp> // glm::vec4        (x,y,z,w)
@@ -19,6 +21,7 @@
 #include "VAOManager/cVAOManager.h"
 #include "MeshObj/cMeshObj.h"
 #include "Light/cLightManager.h"
+#include "GUI/cGUI.h"
 
 #define MODEL_LIST_XML          "asset/model.xml"
 #define VERTEX_SHADER_FILE      "src/shader/vertexShader.glsl"
@@ -27,6 +30,7 @@
 glm::vec3 g_cameraEye = glm::vec3(0.0, 0.0, 0.0f);
 glm::vec3 g_cameraTarget = glm::vec3(5.0f, 0.0f, 0.0f);
 cLightManager* g_pTheLightManager = NULL;
+static GLFWwindow* window = nullptr;
 
 
 static void error_callback(int error, const char* description)
@@ -87,7 +91,7 @@ int main(void)
 
     bool result;
     std::cout << "starting..\n";
-    GLFWwindow* window;
+    //GLFWwindow* window;
     GLuint vertex_buffer, vertex_shader, fragment_shader, program;
     //GLint mvp_location, vpos_location, vcol_location;
     GLuint shaderID = 0;
@@ -100,7 +104,7 @@ int main(void)
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 
-    window = glfwCreateWindow(640, 480, "Simple test example", NULL, NULL);
+    window = glfwCreateWindow(1280, 800, "6028 Graphic Project1", NULL, NULL);
     if (!window)
     {
         glfwTerminate();
@@ -115,6 +119,14 @@ int main(void)
     gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
     glfwSwapInterval(1);
 
+    //initialize imgui
+    cGUI* gui_ = new cGUI();
+    result = gui_->ImGUI_init(window);
+    if (!result)
+    {
+        glfwTerminate();
+        exit(EXIT_FAILURE);
+    }
     
     //create shader program
     cShaderManager* pShaderManager = new cShaderManager();
@@ -146,12 +158,11 @@ int main(void)
     //todo lighting
     ::g_pTheLightManager = new cLightManager();
 
-    ::g_pTheLightManager->loadLightUniformLocation(shaderID);
-
     light0Setup();
     light1Setup();
-    //light2Setup();
+    light2Setup();
     
+    ::g_pTheLightManager->loadLightUniformLocation(shaderID);
     
     //load model
     cVAOManager* pVAOManager = new cVAOManager();
@@ -170,6 +181,9 @@ int main(void)
         exit(EXIT_FAILURE);
     }
     ::g_cameraEye = pVAOManager->cameraEyeFromXML;
+
+    //gui_->pMapInstanceNametoMeshObj = &pVAOManager->mapInstanceNametoMeshObj;
+    gui_->pVecInstanceMeshObj = &pVAOManager->pVecInstanceMeshObj;
 
     //setup object
     //result = pVAOManager->setInstanceObjVisible("terrain01", true);
@@ -215,6 +229,8 @@ int main(void)
         glViewport(0, 0, width, height);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+       
+
         glm::vec3 upVector = glm::vec3(0.0f, 1.0f, 0.0f);
 
         matView = glm::lookAt(::g_cameraEye, ::g_cameraTarget, upVector);
@@ -227,6 +243,8 @@ int main(void)
 
         updateInstanceObj(pShaderManager, pVAOManager, matView, matProjection);
 
+        gui_->ImGUICreateFrame();
+
         glfwSwapBuffers(window);
         glfwPollEvents();
 
@@ -234,6 +252,8 @@ int main(void)
         //std::stringstream 
 
     }
+
+    gui_->ImGUI_shutdown();
 
     glfwDestroyWindow(window);
 
@@ -353,26 +373,29 @@ void updateInstanceObj(cShaderManager* pShaderManager, cVAOManager* pVAOManager,
 
 void light0Setup()
 {
-    ::g_pTheLightManager->light[0].position = glm::vec4(0.0f, 100.0f, 0.0f, 1.0f);
-    ::g_pTheLightManager->light[0].diffuse = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
-    ::g_pTheLightManager->light[0].attenuation = glm::vec4(0.01f, 0.01f, 0.0000001f, 1.0f);
-    ::g_pTheLightManager->light[0].type = cLight::LightType::LIGHT_SPOT;
-    ::g_pTheLightManager->light[0].direction = glm::vec4(0.0f, -1.0f, 0.0f, 1.0f);
+    //cLight* plight1 = new cLight();
+    //::g_pTheLightManager->plight[0] = plight1;
+  
+    ::g_pTheLightManager->plight[0]->position = glm::vec4(0.0f, 100.0f, 0.0f, 1.0f);
+    ::g_pTheLightManager->plight[0]->diffuse = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+    ::g_pTheLightManager->plight[0]->attenuation = glm::vec4(0.01f, 0.01f, 0.0000001f, 1.0f);
+    ::g_pTheLightManager->plight[0]->type = cLight::LightType::LIGHT_SPOT;
+    ::g_pTheLightManager->plight[0]->direction = glm::vec4(0.0f, -1.0f, 0.0f, 1.0f);
 
     // inner and outer angles
-    ::g_pTheLightManager->light[0].angle.x = 10.0f;     // Degrees
-    ::g_pTheLightManager->light[0].angle.y = 20.0f;     // Degrees
+    ::g_pTheLightManager->plight[0]->angle.x = 10.0f;     // Degrees
+    ::g_pTheLightManager->plight[0]->angle.y = 20.0f;     // Degrees
 
-    ::g_pTheLightManager->light[0].turnON = 1;
+    ::g_pTheLightManager->plight[0]->turnON = 1;
 }
 
 void light1Setup()
 {
-    ::g_pTheLightManager->light[1].type = cLight::LightType::LIGHT_DIRECTION;  // 2 means directional
+    ::g_pTheLightManager->plight[1]->type = cLight::LightType::LIGHT_DIRECTION;  // 2 means directional
     // No position or attenuation
-    ::g_pTheLightManager->light[1].diffuse = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
-    ::g_pTheLightManager->light[1].direction = glm::vec4(0.0f, -1.0f, 0.0f, 1.0f);
-    ::g_pTheLightManager->light[1].turnON = 1;
+    ::g_pTheLightManager->plight[1]->diffuse = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+    ::g_pTheLightManager->plight[1]->direction = glm::vec4(0.0f, -1.0f, 0.0f, 1.0f);
+    ::g_pTheLightManager->plight[1]->turnON = 1;
 
     // BE CAREFUL about the direction and colour, since "colour" is really brightness.
     // (i.e. there NO attenuation)
@@ -381,11 +404,11 @@ void light1Setup()
 }
 void light2Setup()
 {
-    ::g_pTheLightManager->light[2].type = cLight::LightType::LIGHT_POINT;
-    ::g_pTheLightManager->light[2].diffuse = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
-    ::g_pTheLightManager->light[2].position = glm::vec4(500.0f, 500.0f, 500.0f, 1.0f);
-    ::g_pTheLightManager->light[2].attenuation = glm::vec4(0.1f, 0.001f, 0.0000001f, 1.0f);
-    ::g_pTheLightManager->light[2].turnON = 1;
+    ::g_pTheLightManager->plight[2]->type = cLight::LightType::LIGHT_POINT;
+    ::g_pTheLightManager->plight[2]->diffuse = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+    ::g_pTheLightManager->plight[2]->position = glm::vec4(500.0f, 500.0f, 500.0f, 1.0f);
+    ::g_pTheLightManager->plight[2]->attenuation = glm::vec4(0.1f, 0.005f, 0.00001f, 1.0f);
+    ::g_pTheLightManager->plight[2]->turnON = 1;
 }
 
 void light3Setup()

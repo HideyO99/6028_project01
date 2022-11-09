@@ -32,6 +32,7 @@ public:
 	bool setInstanceObjSpecularPower(std::string meshObjName, glm::vec4 value);
 
 	std::map<std::string, cMeshObj*> mapInstanceNametoMeshObj;
+	std::vector<cMeshObj*> pVecInstanceMeshObj;
 	glm::vec3 cameraEyeFromXML;
 
 private:

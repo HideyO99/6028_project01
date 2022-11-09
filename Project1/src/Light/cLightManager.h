@@ -11,7 +11,7 @@ public:
 	cLightManager();
 	~cLightManager();
 
-	cLight light[MAX_LIGHT_SOURCE];
+	cLight* plight[MAX_LIGHT_SOURCE];
 
 	void loadLightUniformLocation(unsigned int shaderID);
 	void setLightToShader(unsigned int shaderID);

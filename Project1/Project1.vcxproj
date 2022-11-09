@@ -19,7 +19,15 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="dev\inc\imgui\imgui.cpp" />
+    <ClCompile Include="dev\inc\imgui\imgui_demo.cpp" />
+    <ClCompile Include="dev\inc\imgui\imgui_draw.cpp" />
+    <ClCompile Include="dev\inc\imgui\imgui_impl_glfw.cpp" />
+    <ClCompile Include="dev\inc\imgui\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="dev\inc\imgui\imgui_tables.cpp" />
+    <ClCompile Include="dev\inc\imgui\imgui_widgets.cpp" />
     <ClCompile Include="src\glad.c" />
+    <ClCompile Include="src\GUI\cGUI.cpp" />
     <ClCompile Include="src\Light\cLight.cpp" />
     <ClCompile Include="src\Light\cLightManager.cpp" />
     <ClCompile Include="src\main.cpp" />
@@ -32,7 +40,17 @@
     <ClCompile Include="src\XML\cXML.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="dev\inc\imgui\imconfig.h" />
+    <ClInclude Include="dev\inc\imgui\imgui.h" />
+    <ClInclude Include="dev\inc\imgui\imgui_impl_glfw.h" />
+    <ClInclude Include="dev\inc\imgui\imgui_impl_opengl3.h" />
+    <ClInclude Include="dev\inc\imgui\imgui_impl_opengl3_loader.h" />
+    <ClInclude Include="dev\inc\imgui\imgui_internal.h" />
+    <ClInclude Include="dev\inc\imgui\imstb_rectpack.h" />
+    <ClInclude Include="dev\inc\imgui\imstb_textedit.h" />
+    <ClInclude Include="dev\inc\imgui\imstb_truetype.h" />
     <ClInclude Include="src\globalOpenGL.h" />
+    <ClInclude Include="src\GUI\cGUI.h" />
     <ClInclude Include="src\Light\cLight.h" />
     <ClInclude Include="src\Light\cLightManager.h" />
     <ClInclude Include="src\MeshObj\cMeshObj.h" />

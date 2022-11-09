@@ -13,7 +13,7 @@ public:
 	cXML();
 	~cXML();
 
-	bool loadModelFromXML(std::string filename, std::map<std::string, cMeshObj*>& mapInstancetoMeshOBJ);
+	bool loadModelFromXML(std::string filename, std::map<std::string, cMeshObj*>& mapInstancetoMeshOBJ, std::vector<cMeshObj*>& pVecInstanceMeshObj);
 	bool findPathFromModelName(std::string modelName, std::string& modelPath);
 
 	std::map<std::string, std::string> mapModelNameAndPath;

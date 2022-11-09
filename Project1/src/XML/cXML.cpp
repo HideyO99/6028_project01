@@ -10,7 +10,7 @@ cXML::~cXML()
 {
 }
 
-bool cXML::loadModelFromXML(std::string filename, std::map<std::string, cMeshObj*>& mapInstancetoMeshOBJ)
+bool cXML::loadModelFromXML(std::string filename, std::map<std::string, cMeshObj*>& mapInstancetoMeshOBJ, std::vector<cMeshObj*>& pVecInstanceMeshObj)
 {
 	pugi::xml_document modelList_xml;
 	pugi::xml_parse_result result = modelList_xml.load_file(filename.c_str());
@@ -64,6 +64,7 @@ bool cXML::loadModelFromXML(std::string filename, std::map<std::string, cMeshObj
 			pModedelInsance->rotation.y = std::stof(node_lv3.child("rotateY").child_value());
 			pModedelInsance->rotation.z = std::stof(node_lv3.child("rotateZ").child_value());
 			mapInstancetoMeshOBJ.emplace(instance, pModedelInsance);
+			pVecInstanceMeshObj.push_back(pModedelInsance);
 			mapInstanceAndModelName.emplace(instance, modelName);
 		}
 	}

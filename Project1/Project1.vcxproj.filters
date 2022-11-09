@@ -28,6 +28,12 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
+    <Filter Include="IMGUI">
+      <UniqueIdentifier>{828da5db-4ef3-4f75-aa53-08d1093baa7a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GUI">
+      <UniqueIdentifier>{da26d36d-efcc-43f6-89eb-08a22b87433a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\glad.c">
@@ -63,6 +69,30 @@
     <ClCompile Include="src\Light\cLightManager.cpp">
       <Filter>Light</Filter>
     </ClCompile>
+    <ClCompile Include="dev\inc\imgui\imgui.cpp">
+      <Filter>IMGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="dev\inc\imgui\imgui_demo.cpp">
+      <Filter>IMGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="dev\inc\imgui\imgui_draw.cpp">
+      <Filter>IMGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="dev\inc\imgui\imgui_impl_glfw.cpp">
+      <Filter>IMGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="dev\inc\imgui\imgui_impl_opengl3.cpp">
+      <Filter>IMGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="dev\inc\imgui\imgui_tables.cpp">
+      <Filter>IMGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="dev\inc\imgui\imgui_widgets.cpp">
+      <Filter>IMGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GUI\cGUI.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\globalOpenGL.h">
@@ -88,6 +118,36 @@
     </ClInclude>
     <ClInclude Include="src\Light\cLightManager.h">
       <Filter>Light</Filter>
+    </ClInclude>
+    <ClInclude Include="dev\inc\imgui\imconfig.h">
+      <Filter>IMGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="dev\inc\imgui\imgui.h">
+      <Filter>IMGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="dev\inc\imgui\imgui_impl_glfw.h">
+      <Filter>IMGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="dev\inc\imgui\imgui_impl_opengl3.h">
+      <Filter>IMGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="dev\inc\imgui\imgui_impl_opengl3_loader.h">
+      <Filter>IMGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="dev\inc\imgui\imgui_internal.h">
+      <Filter>IMGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="dev\inc\imgui\imstb_rectpack.h">
+      <Filter>IMGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="dev\inc\imgui\imstb_textedit.h">
+      <Filter>IMGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="dev\inc\imgui\imstb_truetype.h">
+      <Filter>IMGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GUI\cGUI.h">
+      <Filter>GUI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

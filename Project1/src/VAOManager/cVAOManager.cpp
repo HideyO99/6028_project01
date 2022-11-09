@@ -95,7 +95,7 @@ bool cVAOManager::loadModelList(std::string filename, unsigned int shaderProgram
 	cXML modelListXML;
 	bool result;
 
-	result = modelListXML.loadModelFromXML(filename, mapInstanceNametoMeshObj);
+	result = modelListXML.loadModelFromXML(filename, mapInstanceNametoMeshObj, pVecInstanceMeshObj);
 	if (!result)
 	{
 		return false;
