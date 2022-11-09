@@ -45,9 +45,9 @@ void cModelDrawInfo::CalculateExtents(void)
 			this->minY = std::min(this->minY, this->pVertices[index].y);
 			this->minZ = std::min(this->minZ, this->pVertices[index].z);
 
-			this->maxX = std::min(this->maxX, this->pVertices[index].x);
-			this->maxY = std::min(this->maxY, this->pVertices[index].y);
-			this->maxZ = std::min(this->maxZ, this->pVertices[index].z);
+			this->maxX = std::max(this->maxX, this->pVertices[index].x);
+			this->maxY = std::max(this->maxY, this->pVertices[index].y);
+			this->maxZ = std::max(this->maxZ, this->pVertices[index].z);
 
 		}//for (unsigned int index = 0...
 	}//if ( this->pVertices )
