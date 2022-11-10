@@ -34,6 +34,9 @@
     <Filter Include="GUI">
       <UniqueIdentifier>{da26d36d-efcc-43f6-89eb-08a22b87433a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game">
+      <UniqueIdentifier>{caf64ed4-7834-41db-a698-d7e1d8f66c6a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\glad.c">
@@ -93,6 +96,15 @@
     <ClCompile Include="src\GUI\cGUI.cpp">
       <Filter>GUI</Filter>
     </ClCompile>
+    <ClCompile Include="src\Game\Terrain.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\cBattleGame.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\cRobot.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\globalOpenGL.h">
@@ -148,6 +160,15 @@
     </ClInclude>
     <ClInclude Include="src\GUI\cGUI.h">
       <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\Terrain.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\cBattleGame.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\cRobot.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

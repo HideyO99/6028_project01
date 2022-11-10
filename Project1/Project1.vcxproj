@@ -26,6 +26,9 @@
     <ClCompile Include="dev\inc\imgui\imgui_impl_opengl3.cpp" />
     <ClCompile Include="dev\inc\imgui\imgui_tables.cpp" />
     <ClCompile Include="dev\inc\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="src\Game\cBattleGame.cpp" />
+    <ClCompile Include="src\Game\cRobot.cpp" />
+    <ClCompile Include="src\Game\Terrain.cpp" />
     <ClCompile Include="src\glad.c" />
     <ClCompile Include="src\GUI\cGUI.cpp" />
     <ClCompile Include="src\Light\cLight.cpp" />
@@ -49,6 +52,9 @@
     <ClInclude Include="dev\inc\imgui\imstb_rectpack.h" />
     <ClInclude Include="dev\inc\imgui\imstb_textedit.h" />
     <ClInclude Include="dev\inc\imgui\imstb_truetype.h" />
+    <ClInclude Include="src\Game\cBattleGame.h" />
+    <ClInclude Include="src\Game\cRobot.h" />
+    <ClInclude Include="src\Game\Terrain.h" />
     <ClInclude Include="src\globalOpenGL.h" />
     <ClInclude Include="src\GUI\cGUI.h" />
     <ClInclude Include="src\Light\cLight.h" />

@@ -22,6 +22,7 @@
 #include "MeshObj/cMeshObj.h"
 #include "Light/cLightManager.h"
 #include "GUI/cGUI.h"
+#include "Game/Terrain.h"
 
 #define MODEL_LIST_XML          "asset/model.xml"
 #define VERTEX_SHADER_FILE      "src/shader/vertexShader.glsl"
@@ -167,6 +168,9 @@ int main(void)
     //result = pVAOManager->setInstanceObjVisible("terrain01", true);
     result = pVAOManager->setInstanceObjRGB("terrain01", glm::vec4(1.f,1.f,1.f,1.f));
     result = pVAOManager->setInstanceObjSpecularPower("terrain01", glm::vec4(1.0f, 1.0f, 1.0f, 1000.0f));
+    cModelDrawInfo drawingInformation;
+    result = pVAOManager->FindDrawInfo("terrain", drawingInformation);
+    Terrain* terrain_ = new Terrain(drawingInformation);
 
    // result = pVAOManager->setInstanceObjVisible("sphere01", true);
     result = pVAOManager->setInstanceObjRGB("sphere01", glm::vec4(1.f, 1.f, 1.f, 1.f));
