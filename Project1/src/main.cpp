@@ -28,7 +28,7 @@
 #define FRAGMENT_SHADER_FILE    "src/shader/fragmentShader.glsl"
 
 glm::vec3 g_cameraEye = glm::vec3(0.0, 5.0, 0.0f);
-glm::vec3 g_cameraTarget = glm::vec3(0.0f, 0.0f, 0.0f);
+glm::vec3 g_cameraTarget = glm::vec3(6.0f, 0.0f, 0.0f);
 glm::vec3 g_upVector = glm::vec3(0.0f, 1.0f, 0.0f);
 glm::vec3 g_cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
 bool bIsWalkAround = false;
@@ -95,7 +95,7 @@ int main(void)
     glfwSwapInterval(1);
 
     //initialize imgui
-    cGUI* gui_ = new cGUI();
+    cGUI* gui_ = new cGUI(&g_cameraEye,&g_cameraTarget);
     result = gui_->ImGUI_init(window);
     if (!result)
     {
@@ -133,9 +133,7 @@ int main(void)
     //todo lighting
     ::g_pTheLightManager = new cLightManager();
 
-    light0Setup();
-    light1Setup();
-    light2Setup();
+
     
     ::g_pTheLightManager->loadLightUniformLocation(shaderID);
     for (size_t i = 0; i < MAX_LIGHT_SOURCE; i++)
@@ -167,29 +165,89 @@ int main(void)
     //result = pVAOManager->setInstanceObjVisible("terrain01", true);
     result = pVAOManager->setInstanceObjRGB("terrain01", glm::vec4(1.f,1.f,1.f,1.f));
     result = pVAOManager->setInstanceObjSpecularPower("terrain01", glm::vec4(1.0f, 1.0f, 1.0f, 1000.0f));
+    result = pVAOManager->setInstanceObjScale("terrain01", 20);
 
    // result = pVAOManager->setInstanceObjVisible("sphere01", true);
-    result = pVAOManager->setInstanceObjRGB("sphere01", glm::vec4(1.f, 1.f, 1.f, 1.f));
-    result = pVAOManager->setInstanceObjWireframe("sphere01", true);
-    result = pVAOManager->setInstanceObjWireframe("sphere01", true);
+    result = pVAOManager->setInstanceObjRGB("traffic", glm::vec4(1.f, 1.f, 1.f, 1.f));
+    result = pVAOManager->setInstanceObjSpecularPower("traffic", glm::vec4(1.0f, 1.0f, 1.0f, 1000.0f));
+    result = pVAOManager->setInstanceObjScale("traffic", 2);
 
-    //result = pVAOManager->setInstanceObjVisible("sphere02", true);
-    result = pVAOManager->setInstanceObjRGB("sphere02", glm::vec4(1.f, 0.f, 0.f, 1.f));
-    result = pVAOManager->setInstanceObjWireframe("sphere02", true);
+    result = pVAOManager->setInstanceObjRGB("building01", glm::vec4(0.8f, 0.8f, 0.8f, 1.f));
+    result = pVAOManager->setInstanceObjSpecularPower("building01", glm::vec4(1.0f, 1.0f, 1.0f, 1000.0f));
+    result = pVAOManager->setInstanceObjScale("building01", 0.4);
 
-    //result = pVAOManager->setInstanceObjVisible("sphere03", true);
-    result = pVAOManager->setInstanceObjRGB("sphere03", glm::vec4(0.f, 1.f, 0.f, 1.f));
-    result = pVAOManager->setInstanceObjWireframe("sphere03", true);
+    result = pVAOManager->setInstanceObjRGB("building02", glm::vec4(1.f, 0.8f, 0.5f, 1.f));
+    result = pVAOManager->setInstanceObjSpecularPower("building02", glm::vec4(1.0f, 1.0f, 1.0f, 1000.0f));
+    result = pVAOManager->setInstanceObjScale("building02", 0.3);
 
-    //result = pVAOManager->setInstanceObjVisible("sphere04", true);
-    result = pVAOManager->setInstanceObjRGB("sphere04", glm::vec4(0.f, 0.f, 1.f, 1.f));
-    result = pVAOManager->setInstanceObjWireframe("sphere04", true);
+    result = pVAOManager->setInstanceObjRGB("building03", glm::vec4(0.1f, 0.1f, 1.f, 1.f));
+    result = pVAOManager->setInstanceObjSpecularPower("building03", glm::vec4(1.0f, 1.0f, 1.0f, 1000.0f));
+    result = pVAOManager->setInstanceObjScale("building03", 0.1);
 
-    //result = pVAOManager->setInstanceObjVisible("sphere05", true);
-    result = pVAOManager->setInstanceObjRGB("sphere05", glm::vec4(0.f, 1.f, 1.f, 1.f));
-    result = pVAOManager->setInstanceObjWireframe("sphere05", true);
-    //result = pVAOManager->setInstanceObjVisible("terrain02", true);
-    //result = pVAOManager->setInstanceObjScale("terrain02", 0.5);
+    result = pVAOManager->setInstanceObjRGB("Electricbox01", glm::vec4(1.f, 0.f, 1.f, 1.f));
+    result = pVAOManager->setInstanceObjSpecularPower("Electricbox01", glm::vec4(1.0f, 1.0f, 1.0f, 1000.0f));
+    result = pVAOManager->setInstanceObjScale("Electricbox01", 0.4);
+
+    result = pVAOManager->setInstanceObjRGB("mac01", glm::vec4(1.f, 0.f, 0.f, 1.f));
+    result = pVAOManager->setInstanceObjSpecularPower("mac01", glm::vec4(1.0f, 1.0f, 1.0f, 1000.0f));
+    result = pVAOManager->setInstanceObjScale("mac01", 1);
+
+    result = pVAOManager->setInstanceObjRGB("truck01", glm::vec4(0.65f, 0.45f, 0.f, 1.f));
+    result = pVAOManager->setInstanceObjSpecularPower("truck01", glm::vec4(1.0f, 1.0f, 1.0f, 1000.0f));
+    result = pVAOManager->setInstanceObjScale("truck01", 0.7);
+
+    result = pVAOManager->setInstanceObjRGB("road01", glm::vec4(1.f, 1.f, 1.f, 1.f));
+    result = pVAOManager->setInstanceObjSpecularPower("road01", glm::vec4(1.0f, 1.0f, 1.0f, 1000.0f));
+    result = pVAOManager->setInstanceObjScale("road01", 2);
+
+    result = pVAOManager->setInstanceObjRGB("road02", glm::vec4(1.f, 1.f, 1.f, 1.f));
+    result = pVAOManager->setInstanceObjSpecularPower("road02", glm::vec4(1.0f, 1.0f, 1.0f, 1000.0f));
+    result = pVAOManager->setInstanceObjScale("road02", 2);
+
+    result = pVAOManager->setInstanceObjRGB("lamp01", glm::vec4(1.f, 1.f, 1.f, 1.f));
+    result = pVAOManager->setInstanceObjSpecularPower("lamp01", glm::vec4(1.0f, 1.0f, 1.0f, 1000.0f));
+    result = pVAOManager->setInstanceObjScale("lamp01", 1.5);
+    result = pVAOManager->setInstanceObjRGB("lamp02", glm::vec4(1.f, 1.f, 1.f, 1.f));
+    result = pVAOManager->setInstanceObjSpecularPower("lamp02", glm::vec4(1.0f, 1.0f, 1.0f, 1000.0f));
+    result = pVAOManager->setInstanceObjScale("lamp02", 1.5);
+    result = pVAOManager->setInstanceObjRGB("lamp03", glm::vec4(1.f, 1.f, 1.f, 1.f));
+    result = pVAOManager->setInstanceObjSpecularPower("lamp03", glm::vec4(1.0f, 1.0f, 1.0f, 1000.0f));
+    result = pVAOManager->setInstanceObjScale("lamp03", 1.5);
+    result = pVAOManager->setInstanceObjRGB("lamp04", glm::vec4(1.f, 1.f, 1.f, 1.f));
+    result = pVAOManager->setInstanceObjSpecularPower("lamp04", glm::vec4(1.0f, 1.0f, 1.0f, 1000.0f));
+    result = pVAOManager->setInstanceObjScale("lamp04",1.5);
+
+    result = pVAOManager->setInstanceObjVisible("light1", false);
+    result = pVAOManager->setInstanceObjVisible("light2", false);
+    result = pVAOManager->setInstanceObjVisible("light3", false);
+    result = pVAOManager->setInstanceObjVisible("light4", false);
+
+    light0Setup(); //lamp
+    light1Setup();
+    light2Setup();
+    light3Setup();
+    light4Setup();
+
+    //result = pVAOManager->setInstanceObjWireframe("sphere01", true);
+    //result = pVAOManager->setInstanceObjWireframe("sphere01", true);
+
+    ////result = pVAOManager->setInstanceObjVisible("sphere02", true);
+    //result = pVAOManager->setInstanceObjRGB("sphere02", glm::vec4(1.f, 0.f, 0.f, 1.f));
+    //result = pVAOManager->setInstanceObjWireframe("sphere02", true);
+
+    ////result = pVAOManager->setInstanceObjVisible("sphere03", true);
+    //result = pVAOManager->setInstanceObjRGB("sphere03", glm::vec4(0.f, 1.f, 0.f, 1.f));
+    //result = pVAOManager->setInstanceObjWireframe("sphere03", true);
+
+    ////result = pVAOManager->setInstanceObjVisible("sphere04", true);
+    //result = pVAOManager->setInstanceObjRGB("sphere04", glm::vec4(0.f, 0.f, 1.f, 1.f));
+    //result = pVAOManager->setInstanceObjWireframe("sphere04", true);
+
+    ////result = pVAOManager->setInstanceObjVisible("sphere05", true);
+    //result = pVAOManager->setInstanceObjRGB("sphere05", glm::vec4(0.f, 1.f, 1.f, 1.f));
+    //result = pVAOManager->setInstanceObjWireframe("sphere05", true);
+    ////result = pVAOManager->setInstanceObjVisible("terrain02", true);
+    ////result = pVAOManager->setInstanceObjScale("terrain02", 0.5);
 
     while (!glfwWindowShouldClose(window))
     {
@@ -357,59 +415,124 @@ void updateInstanceObj(cShaderManager* pShaderManager, cVAOManager* pVAOManager,
     }
 }
 
-void light0Setup()
+void light0Setup() //lamp
 {
     //cLight* plight1 = new cLight();
     //::g_pTheLightManager->plight[0] = plight1;
 
-    ::g_pTheLightManager->plight[0]->position = glm::vec4(0.0f, 100.0f, 0.0f, 1.0f);
+    ::g_pTheLightManager->plight[0]->position = glm::vec4(6.8f, 2.7f, -1.8f, 1.0f);
     ::g_pTheLightManager->plight[0]->diffuse = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
-    ::g_pTheLightManager->plight[0]->attenuation = glm::vec4(0.01f, 0.01f, 0.0000001f, 1.0f);
+    ::g_pTheLightManager->plight[0]->attenuation = glm::vec4(0.19f, 0.003f, 0.072f, 1.0f);
     ::g_pTheLightManager->plight[0]->type = cLight::LightType::LIGHT_SPOT;
     ::g_pTheLightManager->plight[0]->direction = glm::vec4(0.0f, -1.0f, 0.0f, 1.0f);
-
     // inner and outer angles
     ::g_pTheLightManager->plight[0]->angle.x = 10.0f;     // Degrees
     ::g_pTheLightManager->plight[0]->angle.y = 20.0f;     // Degrees
-
     ::g_pTheLightManager->plight[0]->turnON = 1;
+
+    ::g_pTheLightManager->plight[1]->position = glm::vec4(13.35f, 2.7f, 5.02f, 1.0f);
+    ::g_pTheLightManager->plight[1]->diffuse = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+    ::g_pTheLightManager->plight[1]->attenuation = glm::vec4(0.19f, 0.003f, 0.072f, 1.0f);
+    ::g_pTheLightManager->plight[1]->type = cLight::LightType::LIGHT_SPOT;
+    ::g_pTheLightManager->plight[1]->direction = glm::vec4(0.0f, -1.0f, 0.0f, 1.0f);
+    // inner and outer angles
+    ::g_pTheLightManager->plight[1]->angle.x = 10.0f;     // Degrees
+    ::g_pTheLightManager->plight[1]->angle.y = 20.0f;     // Degrees
+    ::g_pTheLightManager->plight[1]->turnON = 1;
+
+    ::g_pTheLightManager->plight[2]->position = glm::vec4(14.75f, 2.7f, 13.15f, 1.0f);
+    ::g_pTheLightManager->plight[2]->diffuse = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+    ::g_pTheLightManager->plight[2]->attenuation = glm::vec4(0.19f, 0.003f, 0.072f, 1.0f);
+    ::g_pTheLightManager->plight[2]->type = cLight::LightType::LIGHT_SPOT;
+    ::g_pTheLightManager->plight[2]->direction = glm::vec4(0.0f, -1.0f, 0.0f, 1.0f);
+    // inner and outer angles
+    ::g_pTheLightManager->plight[2]->angle.x = 10.0f;     // Degrees
+    ::g_pTheLightManager->plight[2]->angle.y = 20.0f;     // Degrees
+    ::g_pTheLightManager->plight[2]->turnON = 1;
+
+    ::g_pTheLightManager->plight[3]->position = glm::vec4(1.95f, 2.7f, -0.75f, 1.f);
+    ::g_pTheLightManager->plight[3]->diffuse = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+    ::g_pTheLightManager->plight[3]->attenuation = glm::vec4(0.19f, 0.003f, 0.072f, 1.0f);
+    ::g_pTheLightManager->plight[3]->type = cLight::LightType::LIGHT_SPOT;
+    ::g_pTheLightManager->plight[3]->direction = glm::vec4(0.0f, -1.0f, 0.0f, 1.0f);
+    // inner and outer angles
+    ::g_pTheLightManager->plight[3]->angle.x = 10.0f;     // Degrees
+    ::g_pTheLightManager->plight[3]->angle.y = 20.0f;     // Degrees
+    ::g_pTheLightManager->plight[3]->turnON = 1;
 }
 
 void light1Setup()
 {
-    cDirLight* pDirLight = new cDirLight(*::g_pTheLightManager->plight[1]);
-    *pDirLight->pDirection = glm::vec4(0.0f, -1.0f, 0.0f, 1.0f);
-    *pDirLight->pDiffuse = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
-    *pDirLight->pSpecular = glm::vec4(0.f, 0.5f, 0.5f, 1.f);
-    *pDirLight->pTurnON = 1;
+    //cDirLight* pDirLight = new cDirLight(*::g_pTheLightManager->plight[1]);
+    //*pDirLight->pDirection = glm::vec4(0.0f, -1.0f, 0.0f, 1.0f);
+    //*pDirLight->pDiffuse = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+    //*pDirLight->pSpecular = glm::vec4(0.f, 0.5f, 0.5f, 1.f);
+    //*pDirLight->pTurnON = 1;
+    ::g_pTheLightManager->plight[4]->type = cLight::LightType::LIGHT_POINT;
+    ::g_pTheLightManager->plight[4]->diffuse = glm::vec4(12.0f, 0.3f, 0.3f, 1.0f);
+    ::g_pTheLightManager->plight[4]->position = glm::vec4(18.75f, 14.f, 3.65f, 1.0f);
+    ::g_pTheLightManager->plight[4]->attenuation = glm::vec4(5.0f, 2.f, 0.5f, 1.0f);
+    ::g_pTheLightManager->plight[4]->turnON = 1;
 
-    //::g_pTheLightManager->plight[1]->type = cLight::LightType::LIGHT_DIRECTION;  // 2 means directional
-    //// No position or attenuation
-    //::g_pTheLightManager->plight[1]->diffuse = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
-    //::g_pTheLightManager->plight[1]->direction = glm::vec4(0.0f, -1.0f, 0.0f, 1.0f);
-    //::g_pTheLightManager->plight[1]->turnON = 1;
-
-    // BE CAREFUL about the direction and colour, since "colour" is really brightness.
-    // (i.e. there NO attenuation)
 
 
 }
 void light2Setup()
 {
-    ::g_pTheLightManager->plight[2]->type = cLight::LightType::LIGHT_POINT;
-    ::g_pTheLightManager->plight[2]->diffuse = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
-    ::g_pTheLightManager->plight[2]->position = glm::vec4(500.0f, 500.0f, 500.0f, 1.0f);
-    ::g_pTheLightManager->plight[2]->attenuation = glm::vec4(0.1f, 0.005f, 0.00001f, 1.0f);
-    ::g_pTheLightManager->plight[2]->turnON = 1;
+    cDirLight* pDirLight = new cDirLight(*::g_pTheLightManager->plight[5]);
+    *pDirLight->pDirection = glm::vec4(0.0f, -1.0f, 0.0f, 1.0f);
+    *pDirLight->pDiffuse = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+    *pDirLight->pSpecular = glm::vec4(0.5f, 0.5f, 0.5f, 1.f);
+    *pDirLight->pTurnON = 1;
 }
 
 void light3Setup()
 {
+
+    ::g_pTheLightManager->plight[6]->position = glm::vec4(15.6f, 0.6f, 8.7f, 1.0f);
+    ::g_pTheLightManager->plight[6]->diffuse = glm::vec4(0.8f, .50f, 0.4f, 1.0f);
+    ::g_pTheLightManager->plight[6]->attenuation = glm::vec4(0.19f, 0.003f, 0.072f, 1.0f);
+    ::g_pTheLightManager->plight[6]->type = cLight::LightType::LIGHT_SPOT;
+    ::g_pTheLightManager->plight[6]->direction = glm::vec4(0.07f, -0.5f, 1.0f, 1.0f);
+    // inner and outer angles
+    ::g_pTheLightManager->plight[6]->angle.x = 10.0f;     // Degrees
+    ::g_pTheLightManager->plight[6]->angle.y = 20.0f;     // Degrees
+    ::g_pTheLightManager->plight[6]->turnON = 1;
+
+    ::g_pTheLightManager->plight[7]->position = glm::vec4(15.0f, 0.6f, 9.5f, 1.0f);
+    ::g_pTheLightManager->plight[7]->diffuse = glm::vec4(0.8f, .50f, 0.4f, 1.0f);
+    ::g_pTheLightManager->plight[7]->attenuation = glm::vec4(0.19f, 0.003f, 0.072f, 1.0f);
+    ::g_pTheLightManager->plight[7]->type = cLight::LightType::LIGHT_SPOT;
+    ::g_pTheLightManager->plight[7]->direction = glm::vec4(0.07f, -0.5f, 1.0f, 1.0f);
+    // inner and outer angles
+    ::g_pTheLightManager->plight[7]->angle.x = 10.0f;     // Degrees
+    ::g_pTheLightManager->plight[7]->angle.y = 20.0f;     // Degrees
+    ::g_pTheLightManager->plight[7]->turnON = 1;
+
 }
 
 void light4Setup()
 {
-    }
+    ::g_pTheLightManager->plight[8]->position = glm::vec4(11.9f, 0.4f, 5.f, 1.0f);
+    ::g_pTheLightManager->plight[8]->diffuse = glm::vec4(1.f, 1.f, 1.f, 1.0f);
+    ::g_pTheLightManager->plight[8]->attenuation = glm::vec4(0.19f, 0.003f, 0.072f, 1.0f);
+    ::g_pTheLightManager->plight[8]->type = cLight::LightType::LIGHT_SPOT;
+    ::g_pTheLightManager->plight[8]->direction = glm::vec4(0.07f, -0.5f, 1.0f, 1.0f);
+    // inner and outer angles    
+    ::g_pTheLightManager->plight[8]->angle.x = 10.0f;     // Degrees
+    ::g_pTheLightManager->plight[8]->angle.y = 20.0f;     // Degrees
+    ::g_pTheLightManager->plight[8]->turnON = 1;
+
+    ::g_pTheLightManager->plight[9]->position = glm::vec4(11.2f, 0.6f, 5.7f, 1.0f);
+    ::g_pTheLightManager->plight[9]->diffuse = glm::vec4(1.f, 1.f, 1.f, 1.0f);
+    ::g_pTheLightManager->plight[9]->attenuation = glm::vec4(0.19f, 0.003f, 0.072f, 1.0f);
+    ::g_pTheLightManager->plight[9]->type = cLight::LightType::LIGHT_SPOT;
+    ::g_pTheLightManager->plight[9]->direction = glm::vec4(0.07f, -0.5f, 1.0f, 1.0f);
+    // inner and outer angle
+    ::g_pTheLightManager->plight[9]->angle.x = 10.0f;     // Degrees
+    ::g_pTheLightManager->plight[9]->angle.y = 20.0f;     // Degrees
+    ::g_pTheLightManager->plight[9]->turnON = 1;
+}
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {

@@ -59,6 +59,51 @@ void cLightManager::loadLightUniformLocation(unsigned int shaderID)
 	plight[4]->angle_location = glGetUniformLocation(shaderID, "Light[4].angle");
 	plight[4]->type_location = glGetUniformLocation(shaderID, "Light[4].type");
 	plight[4]->turnON_location = glGetUniformLocation(shaderID, "Light[4].turnON");
+
+	plight[5]->position_location = glGetUniformLocation(shaderID, "Light[5].position");
+	plight[5]->diffuse_location = glGetUniformLocation(shaderID, "Light[5].diffuse");
+	plight[5]->specular_location = glGetUniformLocation(shaderID, "Light[5].specular");
+	plight[5]->attenuation_location = glGetUniformLocation(shaderID, "Light[5].attenuation");
+	plight[5]->direction_location = glGetUniformLocation(shaderID, "Light[5].direction");
+	plight[5]->angle_location = glGetUniformLocation(shaderID, "Light[5].angle");
+	plight[5]->type_location = glGetUniformLocation(shaderID, "Light[5].type");
+	plight[5]->turnON_location = glGetUniformLocation(shaderID, "Light[5].turnON");
+
+	plight[6]->position_location = glGetUniformLocation(shaderID, "Light[6].position");
+	plight[6]->diffuse_location = glGetUniformLocation(shaderID, "Light[6].diffuse");
+	plight[6]->specular_location = glGetUniformLocation(shaderID, "Light[6].specular");
+	plight[6]->attenuation_location = glGetUniformLocation(shaderID, "Light[6].attenuation");
+	plight[6]->direction_location = glGetUniformLocation(shaderID, "Light[6].direction");
+	plight[6]->angle_location = glGetUniformLocation(shaderID, "Light[6].angle");
+	plight[6]->type_location = glGetUniformLocation(shaderID, "Light[6].type");
+	plight[6]->turnON_location = glGetUniformLocation(shaderID, "Light[6].turnON");
+
+	plight[7]->position_location = glGetUniformLocation(shaderID, "Light[7].position");
+	plight[7]->diffuse_location = glGetUniformLocation(shaderID, "Light[7].diffuse");
+	plight[7]->specular_location = glGetUniformLocation(shaderID, "Light[7].specular");
+	plight[7]->attenuation_location = glGetUniformLocation(shaderID, "Light[7].attenuation");
+	plight[7]->direction_location = glGetUniformLocation(shaderID, "Light[7].direction");
+	plight[7]->angle_location = glGetUniformLocation(shaderID, "Light[7].angle");
+	plight[7]->type_location = glGetUniformLocation(shaderID, "Light[7].type");
+	plight[7]->turnON_location = glGetUniformLocation(shaderID, "Light[7].turnON");
+
+	plight[8]->position_location = glGetUniformLocation(shaderID, "Light[8].position");
+	plight[8]->diffuse_location = glGetUniformLocation(shaderID, "Light[8].diffuse");
+	plight[8]->specular_location = glGetUniformLocation(shaderID, "Light[8].specular");
+	plight[8]->attenuation_location = glGetUniformLocation(shaderID, "Light[8].attenuation");
+	plight[8]->direction_location = glGetUniformLocation(shaderID, "Light[8].direction");
+	plight[8]->angle_location = glGetUniformLocation(shaderID, "Light[8].angle");
+	plight[8]->type_location = glGetUniformLocation(shaderID, "Light[8].type");
+	plight[8]->turnON_location = glGetUniformLocation(shaderID, "Light[8].turnON");
+
+	plight[9]->position_location = glGetUniformLocation(shaderID, "Light[9].position");
+	plight[9]->diffuse_location = glGetUniformLocation(shaderID, "Light[9].diffuse");
+	plight[9]->specular_location = glGetUniformLocation(shaderID, "Light[9].specular");
+	plight[9]->attenuation_location = glGetUniformLocation(shaderID, "Light[9].attenuation");
+	plight[9]->direction_location = glGetUniformLocation(shaderID, "Light[9].direction");
+	plight[9]->angle_location = glGetUniformLocation(shaderID, "Light[9].angle");
+	plight[9]->type_location = glGetUniformLocation(shaderID, "Light[9].type");
+	plight[9]->turnON_location = glGetUniformLocation(shaderID, "Light[9].turnON");
 }			
 
 void cLightManager::setLightToShader(unsigned int shaderID)

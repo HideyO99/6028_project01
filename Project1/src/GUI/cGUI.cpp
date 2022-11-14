@@ -1,8 +1,10 @@
 #include "cGUI.h"
 
 
-cGUI::cGUI()
+cGUI::cGUI(glm::vec3* camPos, glm::vec3* camTar)
 {
+    this->camPos = camPos;
+    this->camTar = camTar;
 
 }
 
@@ -55,7 +57,7 @@ bool cGUI::ImGUI_render()
     ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_None;
     if (ImGui::BeginTabBar("Object", tab_bar_flags))
     {
-        if (ImGui::BeginTabItem("Avocado"))
+        if (ImGui::BeginTabItem("Model"))
         {
             ImGui::BeginGroup();
             //ImGui::BeginChild("##MainWindow", ImVec2(450, 65), true);
@@ -82,6 +84,12 @@ bool cGUI::ImGUI_render()
                     ImGui::DragFloat("R ##", &pCurrentMeshObject->color_RGBA.r, 0.01f, 0.f, 1.f);
                     ImGui::DragFloat("G ##", &pCurrentMeshObject->color_RGBA.g, 0.01f, 0.f, 1.f);
                     ImGui::DragFloat("B ##", &pCurrentMeshObject->color_RGBA.b, 0.01f, 0.f, 1.f);
+                    ImGui::EndGroup();
+                    ImGui::NewLine();
+                    ImGui::BeginGroup();
+                    ImGui::DragFloat("powerR ##", &pCurrentMeshObject->specular_colour_and_power.r, 0.01f);
+                    ImGui::DragFloat("powerG ##", &pCurrentMeshObject->specular_colour_and_power.g, 0.01f);
+                    ImGui::DragFloat("powerB ##", &pCurrentMeshObject->specular_colour_and_power.b, 0.01f);
                     ImGui::EndGroup();
                     ImGui::NewLine();
                     ImGui::DragFloat("scale##", &pCurrentMeshObject->scale, 0.1f, 0.f, 100.f);
@@ -124,13 +132,13 @@ bool cGUI::ImGUI_render()
                         ImGui::DragFloat("Diffuse y##", &pCurrentLgiht->diffuse.y, 0.1f);
                         ImGui::DragFloat("Diffuse z##", &pCurrentLgiht->diffuse.z, 0.1f);
                         ImGui::NewLine();
-                        ImGui::DragFloat("Specualar R##", &pCurrentLgiht->specular.r, 0.01f, 0.f, 1.f);
-                        ImGui::DragFloat("Specualar G##", &pCurrentLgiht->specular.g, 0.01f, 0.f, 1.f);
-                        ImGui::DragFloat("Specualar B##", &pCurrentLgiht->specular.b, 0.01f, 0.f, 1.f);
+                        ImGui::DragFloat("Specualar R##", &pCurrentLgiht->specular.r, 0.01f);
+                        ImGui::DragFloat("Specualar G##", &pCurrentLgiht->specular.g, 0.01f);
+                        ImGui::DragFloat("Specualar B##", &pCurrentLgiht->specular.b, 0.01f);
                         ImGui::NewLine();
-                        ImGui::DragFloat("constant ##", &pCurrentLgiht->attenuation.x, 0.01f, 0.001f, 10.f);
-                        ImGui::DragFloat("linear ##", &pCurrentLgiht->attenuation.y, 0.001f, 0.0001f, 10.f);
-                        ImGui::DragFloat("quadratic ##", &pCurrentLgiht->attenuation.z, 0.0001f, 0.00001f, 10.f);
+                        ImGui::DragFloat("constant ##", &pCurrentLgiht->attenuation.x, 0.01f);
+                        ImGui::DragFloat("linear ##", &pCurrentLgiht->attenuation.y, 0.001f);
+                        ImGui::DragFloat("quadratic ##", &pCurrentLgiht->attenuation.z, 0.0001f);
 
                         break;
                     case (cLight::LIGHT_SPOT):
@@ -139,38 +147,38 @@ bool cGUI::ImGUI_render()
                         ImGui::DragFloat("Position y##", &pCurrentLgiht->position.y, 1.f);
                         ImGui::DragFloat("Position z##", &pCurrentLgiht->position.z, 1.f);
                         ImGui::NewLine();
-                        ImGui::DragFloat("Dirction x##", &pCurrentLgiht->direction.x, 0.01f, -1.f, 1.f);
-                        ImGui::DragFloat("Dirction y##", &pCurrentLgiht->direction.y, 0.01f, -1.f, 1.f);
-                        ImGui::DragFloat("Dirction z##", &pCurrentLgiht->direction.z, 0.01f, -1.f, 1.f);
+                        ImGui::DragFloat("Dirction x##", &pCurrentLgiht->direction.x, 0.01f);
+                        ImGui::DragFloat("Dirction y##", &pCurrentLgiht->direction.y, 0.01f);
+                        ImGui::DragFloat("Dirction z##", &pCurrentLgiht->direction.z, 0.01f);
                         ImGui::NewLine();
                         ImGui::DragFloat("Diffuse x##", &pCurrentLgiht->diffuse.x, 0.1f);
                         ImGui::DragFloat("Diffuse y##", &pCurrentLgiht->diffuse.y, 0.1f);
                         ImGui::DragFloat("Diffuse z##", &pCurrentLgiht->diffuse.z, 0.1f);
                         ImGui::NewLine();
-                        ImGui::DragFloat("Specualar R##", &pCurrentLgiht->specular.r, 0.01f, 0.f, 1.f);
-                        ImGui::DragFloat("Specualar G##", &pCurrentLgiht->specular.g, 0.01f, 0.f, 1.f);
-                        ImGui::DragFloat("Specualar B##", &pCurrentLgiht->specular.b, 0.01f, 0.f, 1.f);
+                        ImGui::DragFloat("Specualar R##", &pCurrentLgiht->specular.r, 0.01f);
+                        ImGui::DragFloat("Specualar G##", &pCurrentLgiht->specular.g, 0.01f);
+                        ImGui::DragFloat("Specualar B##", &pCurrentLgiht->specular.b, 0.01f);
                         ImGui::NewLine();
-                        ImGui::DragFloat("constant ##", &pCurrentLgiht->attenuation.x, 0.01f, 0.001f, 10.f);
-                        ImGui::DragFloat("linear ##", &pCurrentLgiht->attenuation.y, 0.001f, 0.0001f, 10.f);
-                        ImGui::DragFloat("quadratic ##", &pCurrentLgiht->attenuation.z, 0.0001f, 0.00001f, 10.f);
+                        ImGui::DragFloat("constant ##", &pCurrentLgiht->attenuation.x, 0.01f);
+                        ImGui::DragFloat("linear ##", &pCurrentLgiht->attenuation.y, 0.001f);
+                        ImGui::DragFloat("quadratic ##", &pCurrentLgiht->attenuation.z, 0.0001f);
                         ImGui::NewLine();
                         ImGui::DragFloat("inner angle ##", &pCurrentLgiht->angle.x, 0.01f);
                         ImGui::DragFloat("outer angle ##", &pCurrentLgiht->angle.y, 0.01f);
                         break;
                     case (cLight::LIGHT_DIRECTION):
                         ImGui::Checkbox("enable ##", (bool*)&pCurrentLgiht->turnON);
-                        ImGui::DragFloat("Dirction x##", &pCurrentLgiht->direction.x, 0.01f,-1.f,1.f);
-                        ImGui::DragFloat("Dirction y##", &pCurrentLgiht->direction.y, 0.01f, -1.f, 1.f);
-                        ImGui::DragFloat("Dirction z##", &pCurrentLgiht->direction.z, 0.01f, -1.f, 1.f);
+                        ImGui::DragFloat("Dirction x##", &pCurrentLgiht->direction.x, 0.01f);
+                        ImGui::DragFloat("Dirction y##", &pCurrentLgiht->direction.y, 0.01f);
+                        ImGui::DragFloat("Dirction z##", &pCurrentLgiht->direction.z, 0.01f);
                         ImGui::NewLine();
                         ImGui::DragFloat("Diffuse x##", &pCurrentLgiht->diffuse.x, 0.1f);
                         ImGui::DragFloat("Diffuse y##", &pCurrentLgiht->diffuse.y, 0.1f);
                         ImGui::DragFloat("Diffuse z##", &pCurrentLgiht->diffuse.z, 0.1f);
                         ImGui::NewLine();
-                        ImGui::DragFloat("Specualar R##", &pCurrentLgiht->specular.r, 0.01f, 0.f, 1.f);
-                        ImGui::DragFloat("Specualar G##", &pCurrentLgiht->specular.g, 0.01f, 0.f, 1.f);
-                        ImGui::DragFloat("Specualar B##", &pCurrentLgiht->specular.b, 0.01f, 0.f, 1.f);
+                        ImGui::DragFloat("Specualar R##", &pCurrentLgiht->specular.r, 0.01f);
+                        ImGui::DragFloat("Specualar G##", &pCurrentLgiht->specular.g, 0.01f);
+                        ImGui::DragFloat("Specualar B##", &pCurrentLgiht->specular.b, 0.01f);
                         break;
                     default:
                         break;
@@ -183,8 +191,14 @@ bool cGUI::ImGUI_render()
         }
         if (ImGui::BeginTabItem("Camera"))
         {
-            ImGui::BeginGroup();
-            ImGui::Text("camera");
+            ImGui::BeginGroup(); ::
+            ImGui::DragFloat("camera x##", &camPos->x, 1.f);
+            ImGui::DragFloat("camera y##", &camPos->y, 1.f);
+            ImGui::DragFloat("camera z##", &camPos->z, 1.f);
+            ImGui::NewLine();
+            ImGui::DragFloat("target x##", &camTar->x, 1.f);
+            ImGui::DragFloat("target y##", &camTar->y, 1.f);
+            ImGui::DragFloat("target z##", &camTar->z, 1.f);
             ImGui::EndGroup();
             ImGui::EndTabItem();
         }

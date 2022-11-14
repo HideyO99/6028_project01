@@ -5,7 +5,7 @@ in vec4 fNormal;
 in vec4 fVertWorldLocation;	// using only matModel
 in vec2 fTextureUV;
 
-#define MAX_LIGHT_SOURCE 5
+#define MAX_LIGHT_SOURCE 10
 out vec4 pixelOutputColor;
 
 struct sLight

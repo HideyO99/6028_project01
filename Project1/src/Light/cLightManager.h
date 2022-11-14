@@ -3,7 +3,7 @@
 #include "cLight.h"
 #include <string>
 
-#define MAX_LIGHT_SOURCE 5
+#define MAX_LIGHT_SOURCE 10
 
 class cLightManager
 {

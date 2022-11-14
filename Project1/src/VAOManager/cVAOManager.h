@@ -31,6 +31,9 @@ public:
 	bool setInstanceObjLighting(std::string meshObjName, bool value);
 	bool setInstanceObjSpecularPower(std::string meshObjName, glm::vec4 value);
 
+	bool setInstanceObjPosition(std::string meshObjName, glm::vec4 value);
+
+	cMeshObj* findMeshObjAddr(std::string meshObjName);
 	std::map<std::string, cMeshObj*> mapInstanceNametoMeshObj;
 	std::vector<cMeshObj*> pVecInstanceMeshObj;
 	glm::vec3 cameraEyeFromXML;
